@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-main-blue: #264a70;
+    --color-main-green: #11998e;
+    --color-accent-orange: #e97d30;
+    --color-secondary-blue: #495a6c;
+    --color-light-gray: #fafafa;
+    --color-dark-gray: #a5b0b9;
+    --color-success-green: #10b981;
+    --color-danger-red: #ef4444;
+    --color-warning-yellow: #f59e0b;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--color-light-gray);
+    color: var(--color-secondary-blue);
+    line-height: 1.6;
+  }
+
+  /* Softer, warmer dark mode - easy on the eyes */
+  .dark body {
+    @apply bg-slate-900 text-slate-300;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+
+  /* Card base styles with softer dark mode */
+  .card-base {
+    @apply bg-white dark:bg-slate-800 rounded-2xl shadow-card dark:shadow-slate-900/50 p-6 transition-shadow duration-300;
+  }
+
+  .card-base:hover {
+    @apply shadow-card-hover dark:shadow-slate-900/70;
+  }
+
+  /* Button base styles with comfortable dark colors */
+  .btn-base {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-slate-900;
+  }
+
+  .btn-primary {
+    @apply btn-base bg-main-blue dark:bg-blue-700 text-white hover:bg-accent-orange dark:hover:bg-blue-600 focus:ring-main-blue;
+  }
+
+  .btn-success {
+    @apply btn-base bg-main-green dark:bg-emerald-700 text-white hover:bg-success-green dark:hover:bg-emerald-600 focus:ring-main-green;
+  }
+
+  .btn-danger {
+    @apply btn-base bg-danger-red dark:bg-red-700 text-white hover:bg-red-600 dark:hover:bg-red-600 focus:ring-danger-red;
+  }
+
+  .btn-secondary {
+    @apply btn-base border-2 border-main-blue dark:border-blue-600 text-main-blue dark:text-blue-400 hover:bg-main-blue dark:hover:bg-blue-700 hover:text-white focus:ring-main-blue;
+  }
+
+  /* Form input styles with reduced eye strain */
+  .input-base {
+    @apply w-full px-4 py-3 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-orange dark:focus:ring-blue-600 focus:border-transparent transition-all duration-200;
+  }
+
+  /* Badge styles with muted dark colors */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-400;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-100 dark:bg-amber-900/30 text-yellow-800 dark:text-amber-400;
+  }
+
+  .badge-info {
+    @apply badge bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400;
+  }
+}
+
+@layer utilities {
+
+  /* Animation utilities */
+  .animate-spin-slow {
+    animation: spin 2s linear infinite;
+  }
+
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--color-dark-gray);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--color-secondary-blue);
+  }
+}
+
+/* Toast Notification Custom Styles */
+:root {
+  --toastify-color-light: #fff;
+  --toastify-color-dark: #121212;
+  --toastify-color-info: #3498db;
+  --toastify-color-success: #10b981;
+  --toastify-color-warning: #f59e0b;
+  --toastify-color-error: #ef4444;
+  --toastify-font-family: 'Inter', sans-serif;
+}
+
+/* Loading spinner keyframes */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

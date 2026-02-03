@@ -1,0 +1,12 @@
+{
+    "name": "treasury-wallet-generator",
+    "version": "1.0.0",
+    "description": "Generate Cardano treasury wallet using MeshJS",
+    "type": "module",
+    "scripts": {
+        "generate": "node generate-wallet.js"
+    },
+    "dependencies": {
+        "@meshsdk/core": "^1.5.0"
+    }
+}
