@@ -1,121 +1,139 @@
 <template>
-  <div class="bg-gradient-to-br from-white to-blue-50 rounded-3xl shadow-2xl p-10 border-t-8 border-accent-orange">
-    <!-- Header with BIG Icon -->
-    <div class="flex items-center space-x-4 mb-8">
-      <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-accent-orange to-orange-600 flex items-center justify-center shadow-lg">
-        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+    <!-- Header with gradient -->
+    <div class="bg-gradient-to-r from-main-blue to-main-green p-6 sm:p-8 text-white">
+      <div class="flex items-center space-x-4">
+        <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-xl sm:text-2xl font-extrabold">Submit Insurance Claim</h3>
+          <p class="text-white/70 text-sm mt-0.5">AI-powered fraud detection & instant verification</p>
+        </div>
       </div>
-      <div>
-        <h3 class="text-3xl font-bold text-main-blue">Submit Insurance Claim</h3>
-        <p class="text-secondary-blue">AI-powered fraud detection & instant verification</p>
+
+      <!-- Step Indicator -->
+      <div class="flex items-center justify-between mt-6 sm:mt-8 px-2">
+        <div v-for="(step, idx) in steps" :key="idx" class="flex items-center" :class="idx < steps.length - 1 ? 'flex-1' : ''">
+          <div class="flex flex-col items-center">
+            <div
+              class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300"
+              :class="currentStep > idx ? 'bg-white text-main-green' : currentStep === idx ? 'bg-white text-main-blue ring-4 ring-white/30' : 'bg-white/20 text-white/60'"
+            >
+              <svg v-if="currentStep > idx" class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+              <span v-else>{{ idx + 1 }}</span>
+            </div>
+            <span class="text-[10px] sm:text-xs mt-1.5 font-medium whitespace-nowrap" :class="currentStep >= idx ? 'text-white' : 'text-white/40'">{{ step }}</span>
+          </div>
+          <div v-if="idx < steps.length - 1" class="flex-1 h-0.5 mx-2 sm:mx-3 rounded-full transition-all duration-500" :class="currentStep > idx ? 'bg-white' : 'bg-white/20'"></div>
+        </div>
       </div>
     </div>
 
-    <form @submit.prevent="submitClaim" class="space-y-8">
-      <!--Patient Information (Auto-loaded from Database) -->
-      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border-l-4 border-main-blue shadow-md">
-        <div class="flex items-center space-x-3 mb-4">
-          <svg class="w-8 h-8 text-main-blue dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <form @submit.prevent="submitClaim" class="p-5 sm:p-8">
+      <!-- Step 0: Patient Info (always visible as context) -->
+      <div class="mb-6">
+        <div class="flex items-center space-x-2 mb-3">
+          <svg class="w-5 h-5 text-main-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
-          <h4 class="text-xl font-bold text-main-blue dark:text-blue-400">Patient Information</h4>
-          <span class="ml-auto px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-semibold rounded-full">From your account</span>
+          <h4 class="text-sm font-bold text-main-blue uppercase tracking-wider">Patient Information</h4>
+          <span class="ml-auto px-2.5 py-0.5 bg-blue-100 text-main-blue text-[10px] font-bold rounded-full">AUTO</span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
-            <div class="text-xs text-secondary-blue dark:text-gray-400 mb-1">Patient Name</div>
-            <div class="text-lg font-semibold text-main-blue dark:text-blue-300">{{ userData?.name || 'Connected User' }}</div>
+        <div class="grid grid-cols-3 gap-2 sm:gap-3">
+          <div class="bg-gray-50 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-100">
+            <div class="text-[10px] text-dark-gray uppercase tracking-wider mb-0.5">Name</div>
+            <div class="text-sm sm:text-base font-semibold text-gray-900 truncate">{{ userData?.name || '—' }}</div>
           </div>
-          <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
-            <div class="text-xs text-secondary-blue dark:text-gray-400 mb-1">Age</div>
-            <div class="text-lg font-semibold text-main-blue dark:text-blue-300">{{ userData?.age || 'Not set' }} years</div>
+          <div class="bg-gray-50 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-100">
+            <div class="text-[10px] text-dark-gray uppercase tracking-wider mb-0.5">Age</div>
+            <div class="text-sm sm:text-base font-semibold text-gray-900">{{ userData?.age || '—' }}</div>
           </div>
-          <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
-            <div class="text-xs text-secondary-blue dark:text-gray-400 mb-1">Gender</div>
-            <div class="text-lg font-semibold text-main-blue dark:text-blue-300">{{ userData?.gender || 'Not set' }}</div>
+          <div class="bg-gray-50 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-100">
+            <div class="text-[10px] text-dark-gray uppercase tracking-wider mb-0.5">Gender</div>
+            <div class="text-sm sm:text-base font-semibold text-gray-900 capitalize">{{ userData?.gender || '—' }}</div>
           </div>
         </div>
       </div>
 
-      <!-- Hospital Admission Details -->
-      <div class="bg-white rounded-2xl p-6 border-l-4 border-accent-orange shadow-md">
-        <div class="flex items-center space-x-3 mb-4">
-          <svg class="w-8 h-8 text-accent-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-          </svg>
-          <h4 class="text-xl font-bold text-accent-orange">Hospital Stay Details</h4>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-bold text-secondary-blue mb-2 flex items-center space-x-2">
-              <svg class="w-5 h-5 text-dark-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      <div class="border-t border-gray-100 pt-6 space-y-6">
+
+        <!-- Step 1: Hospital Stay Details -->
+        <div v-show="currentStep === 0" class="space-y-5 animate-fadeIn">
+          <div class="flex items-center space-x-2 mb-1">
+            <div class="w-7 h-7 rounded-lg bg-accent-orange/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-accent-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
-              <span>Admission Date</span>
-            </label>
-            <input
-              v-model="formData.admission_date"
-              type="date"
-              required
-              class="input-base text-lg"
-              :max="formData.discharge_date || today"
-            />
+            </div>
+            <h4 class="text-base sm:text-lg font-bold text-gray-900">Hospital Stay Details</h4>
           </div>
-          <div>
-            <label class="block text-sm font-bold text-secondary-blue mb-2 flex items-center space-x-2">
-              <svg class="w-5 h-5 text-dark-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span>Discharge Date</span>
-            </label>
-            <input
-              v-model="formData.discharge_date"
-              type="date"
-              required
-              class="input-base text-lg"
-              :min="formData.admission_date"
-              :max="today"
-            />
-          </div>
-        </div>
-        
-        <!-- Days Hospitalized (Auto-calculated) -->
-        <div v-if="daysHospitalized > 0" class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <div class="flex items-center space-x-3">
-            <svg class="w-6 h-6 text-main-blue" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-            </svg>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <div class="text-sm text-secondary-blue">Duration of Hospital Stay</div>
-              <div class="text-2xl font-bold text-main-blue">{{ daysHospitalized }} {{ daysHospitalized === 1 ? 'Day' : 'Days' }}</div>
+              <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Admission Date *</label>
+              <input
+                v-model="formData.admission_date"
+                type="date"
+                required
+                class="input-base"
+                :max="formData.discharge_date || today"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Discharge Date *</label>
+              <input
+                v-model="formData.discharge_date"
+                type="date"
+                required
+                class="input-base"
+                :min="formData.admission_date"
+                :max="today"
+              />
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Medical Details -->
-      <div class="bg-white rounded-2xl p-6 border-l-4 border-main-green shadow-md">
-        <div class="flex items-center space-x-3 mb-4">
-          <svg class="w-8 h-8 text-main-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <h4 class="text-xl font-bold text-main-green">Treatment & Diagnosis</h4>
+          <transition name="fade">
+            <div v-if="daysHospitalized > 0" class="flex items-center space-x-3 p-3.5 bg-blue-50 rounded-xl border border-blue-100">
+              <div class="w-9 h-9 rounded-full bg-main-blue/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-main-blue" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <div class="text-xs text-secondary-blue">Duration</div>
+                <div class="text-xl font-bold text-main-blue">{{ daysHospitalized }} {{ daysHospitalized === 1 ? 'Day' : 'Days' }}</div>
+              </div>
+            </div>
+          </transition>
+
+          <div class="pt-2">
+            <button type="button" @click="nextStep" :disabled="!formData.admission_date || !formData.discharge_date"
+              class="w-full btn-primary py-3.5 flex items-center justify-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
+              <span>Continue to Diagnosis</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            </button>
+          </div>
         </div>
-        <div class="grid grid-cols-1 gap-6">
-          <div>
-            <label class="block text-sm font-bold text-secondary-blue mb-2 flex items-center space-x-2">
-              <svg class="w-5 h-5 text-dark-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+        <!-- Step 2: Diagnosis & Amount -->
+        <div v-show="currentStep === 1" class="space-y-5 animate-fadeIn">
+          <div class="flex items-center space-x-2 mb-1">
+            <div class="w-7 h-7 rounded-lg bg-main-green/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-main-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <span>Primary Diagnosis *</span>
-            </label>
-            <select
-              v-model="formData.diagnosis"
-              required
-              class="input-base text-lg"
-            >
+            </div>
+            <h4 class="text-base sm:text-lg font-bold text-gray-900">Treatment & Billing</h4>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Primary Diagnosis *</label>
+            <select v-model="formData.diagnosis" required class="input-base">
               <option value="" disabled>Select primary diagnosis...</option>
               <option value="Pregnancy">Pregnancy & Childbirth</option>
               <option value="Hypertension">Hypertension (High Blood Pressure)</option>
@@ -127,223 +145,233 @@
               <option value="Other">Other Medical Condition</option>
             </select>
           </div>
-        </div>
-      </div>
 
-      <!-- Billing Information -->
-      <div class="bg-white rounded-2xl p-6 border-l-4 border-success-green shadow-md">
-        <div class="flex items-center space-x-3 mb-4">
-          <svg class="w-8 h-8 text-success-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h4 class="text-xl font-bold text-success-green">Claim Amount</h4>
-        </div>
-        <div>
-          <label class="block text-sm font-bold text-secondary-blue mb-2">
-            Total Amount Billed (₳) *
-          </label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-              <span class="text-dark-gray text-2xl font-bold">₳</span>
-            </div>
-            <input
-              v-model.number="formData.amount_billed"
-              type="number"
-              step="0.01"
-              min="0"
-              required
-              class="input-base pl-16 text-2xl font-bold text-main-green"
-              placeholder="e.g., 5000.00"
-            />
-          </div>
-          <p class="text-xs text-dark-gray mt-2">Enter the total hospital bill amount including all treatments, room charges, and medications</p>
-        </div>
-      </div>
-
-      <!-- Document Upload Section -->
-      <div class="bg-white rounded-2xl p-6 border-l-4 border-purple-500 shadow-md">
-        <div class="flex items-center space-x-3 mb-4">
-          <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-          </svg>
-          <h4 class="text-xl font-bold text-purple-500">Supporting Documents</h4>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Receipt Upload -->
           <div>
-            <label class="block text-sm font-bold text-secondary-blue mb-2">Hospital Receipt *</label>
-            
-            <!-- Upload area (show when no file) -->
-            <div v-if="!receiptFile" class="relative">
-              <input type="file" accept="image/*,application/pdf" @change="handleReceiptUpload" class="hidden" id="receipt-upload" />
-              <label for="receipt-upload" class="flex items-center justify-center w-full px-4 py-8 border-2 border-dashed border-purple-300 rounded-xl hover:border-purple-500 hover:bg-purple-50 transition-all cursor-pointer group">
-                <div class="text-center">
-                  <svg class="w-12 h-12 mx-auto text-purple-400 group-hover:text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <p class="text-sm font-semibold text-purple-600">Click to upload receipt</p>
-                  <p class="text-xs text-dark-gray mt-1">PDF, JPG, PNG (Max 10MB)</p>
-                </div>
-              </label>
+            <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Total Amount Billed (₳) *</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span class="text-dark-gray text-xl font-bold">₳</span>
+              </div>
+              <input
+                v-model.number="formData.amount_billed"
+                type="number"
+                step="0.01"
+                min="0"
+                required
+                class="input-base pl-12 text-xl font-bold text-main-green"
+                placeholder="0.00"
+              />
             </div>
-            
-            <!-- File preview (show when file uploaded) -->
-            <div v-else class="bg-green-50 border-2 border-green-300 rounded-xl p-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3 flex-1">
-                  <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                  </svg>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-green-800 truncate">{{ receiptFileName }}</p>
-                    <p class="text-xs text-green-600">{{ formatFileSize(receiptFile.size) }}</p>
+            <p class="text-[10px] sm:text-xs text-dark-gray mt-1.5">Total hospital bill including treatments, room charges, and medications</p>
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <button type="button" @click="prevStep"
+              class="flex-1 py-3.5 border-2 border-gray-200 text-secondary-blue font-semibold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center space-x-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" /></svg>
+              <span>Back</span>
+            </button>
+            <button type="button" @click="nextStep" :disabled="!formData.diagnosis || !formData.amount_billed"
+              class="flex-[2] btn-primary py-3.5 flex items-center justify-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
+              <span>Continue to Documents</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Documents & Submit -->
+        <div v-show="currentStep === 2" class="space-y-5 animate-fadeIn">
+          <div class="flex items-center space-x-2 mb-1">
+            <div class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <h4 class="text-base sm:text-lg font-bold text-gray-900">Supporting Documents</h4>
+            <span class="text-[10px] px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full font-semibold">Optional</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Receipt Upload -->
+            <div>
+              <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Hospital Receipt</label>
+              <div v-if="!receiptFile" class="relative">
+                <input type="file" accept="image/*,application/pdf" @change="handleReceiptUpload" class="hidden" id="receipt-upload" />
+                <label for="receipt-upload" class="flex flex-col items-center justify-center w-full py-6 sm:py-8 border-2 border-dashed border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50/50 transition-all cursor-pointer group">
+                  <div class="w-10 h-10 rounded-full bg-purple-100 group-hover:bg-purple-200 flex items-center justify-center mb-2 transition-colors">
+                    <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
                   </div>
+                  <p class="text-xs font-semibold text-purple-600">Upload receipt</p>
+                  <p class="text-[10px] text-dark-gray mt-0.5">PDF, JPG, PNG (Max 10MB)</p>
+                </label>
+              </div>
+              <div v-else class="bg-green-50 border border-green-200 rounded-xl p-3 sm:p-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5 flex-1 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                    <div class="min-w-0">
+                      <p class="text-xs font-semibold text-green-800 truncate">{{ receiptFileName }}</p>
+                      <p class="text-[10px] text-green-600">{{ formatFileSize(receiptFile.size) }}</p>
+                    </div>
+                  </div>
+                  <button @click="removeReceipt" type="button" class="p-1.5 hover:bg-red-100 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
                 </div>
-                <button 
-                  @click="removeReceipt" 
-                  type="button"
-                  class="ml-3 p-2 hover:bg-red-100 rounded-lg transition-colors group"
-                  title="Remove file"
-                >
-                  <svg class="w-5 h-5 text-red-600 group-hover:text-red-700" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                  </svg>
-                </button>
+              </div>
+            </div>
+
+            <!-- Prescription Upload -->
+            <div>
+              <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Doctor's Prescription</label>
+              <div v-if="!prescriptionFile" class="relative">
+                <input type="file" accept="image/*,application/pdf" @change="handlePrescriptionUpload" class="hidden" id="prescription-upload" />
+                <label for="prescription-upload" class="flex flex-col items-center justify-center w-full py-6 sm:py-8 border-2 border-dashed border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50/50 transition-all cursor-pointer group">
+                  <div class="w-10 h-10 rounded-full bg-purple-100 group-hover:bg-purple-200 flex items-center justify-center mb-2 transition-colors">
+                    <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <p class="text-xs font-semibold text-purple-600">Upload prescription</p>
+                  <p class="text-[10px] text-dark-gray mt-0.5">PDF, JPG, PNG (Max 10MB)</p>
+                </label>
+              </div>
+              <div v-else class="bg-green-50 border border-green-200 rounded-xl p-3 sm:p-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5 flex-1 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                    <div class="min-w-0">
+                      <p class="text-xs font-semibold text-green-800 truncate">{{ prescriptionFileName }}</p>
+                      <p class="text-[10px] text-green-600">{{ formatFileSize(prescriptionFile.size) }}</p>
+                    </div>
+                  </div>
+                  <button @click="removePrescription" type="button" class="p-1.5 hover:bg-red-100 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Prescription Upload -->
-          <div>
-            <label class="block text-sm font-bold text-secondary-blue mb-2">Doctor's Prescription *</label>
-            
-            <!-- Upload area (show when no file) -->
-            <div v-if="!prescriptionFile" class="relative">
-              <input type="file" accept="image/*,application/pdf" @change="handlePrescriptionUpload" class="hidden" id="prescription-upload" />
-              <label for="prescription-upload" class="flex items-center justify-center w-full px-4 py-8 border-2 border-dashed border-purple-300 rounded-xl hover:border-purple-500 hover:bg-purple-50 transition-all cursor-pointer group">
-                <div class="text-center">
-                  <svg class="w-12 h-12 mx-auto text-purple-400 group-hover:text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <p class="text-sm font-semibold text-purple-600">Click to upload prescription</p>
-                  <p class="text-xs text-dark-gray mt-1">PDF, JPG, PNG (Max 10MB)</p>
-                </div>
-              </label>
-            </div>
-            
-            <!-- File preview (show when file uploaded) -->
-            <div v-else class="bg-green-50 border-2 border-green-300 rounded-xl p-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3 flex-1">
-                  <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                  </svg>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-green-800 truncate">{{ prescriptionFileName }}</p>
-                    <p class="text-xs text-green-600">{{ formatFileSize(prescriptionFile.size) }}</p>
-                  </div>
-                </div>
-                <button 
-                  @click="removePrescription" 
-                  type="button"
-                  class="ml-3 p-2 hover:bg-red-100 rounded-lg transition-colors group"
-                  title="Remove file"
-                >
-                  <svg class="w-5 h-5 text-red-600 group-hover:text-red-700" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                  </svg>
-                </button>
+          <!-- Summary Card -->
+          <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+            <h5 class="text-xs font-bold text-secondary-blue uppercase tracking-wider mb-3">Claim Summary</h5>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+              <div>
+                <div class="text-[10px] text-dark-gray">Dates</div>
+                <div class="font-semibold text-gray-900">{{ daysHospitalized }} day{{ daysHospitalized !== 1 ? 's' : '' }}</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-dark-gray">Diagnosis</div>
+                <div class="font-semibold text-gray-900 truncate">{{ formData.diagnosis || '—' }}</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-dark-gray">Amount</div>
+                <div class="font-bold text-main-green">₳{{ formData.amount_billed || '0' }}</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-dark-gray">Documents</div>
+                <div class="font-semibold text-gray-900">{{ (receiptFile ? 1 : 0) + (prescriptionFile ? 1 : 0) }} / 2</div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Submit Button - BIG and BOLD with Cancel option -->
-      <div class="pt-4">
-        <button
-          v-if="!submitting"
-          type="submit"
-          class="w-full py-6 px-8 btn-primary text-xl font-bold rounded-2xl shadow-2xl flex items-center justify-center space-x-4 transform hover:scale-105 transition-all duration-300"
-        >
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>Submit for AI Verification</span>
-        </button>
+          <!-- Submit / Cancel buttons -->
+          <div class="flex gap-3 pt-2">
+            <button type="button" @click="prevStep"
+              class="flex-1 py-3.5 border-2 border-gray-200 text-secondary-blue font-semibold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center space-x-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" /></svg>
+              <span>Back</span>
+            </button>
 
-        <!-- Processing state with Cancel button -->
-        <div v-else class="space-y-4">
-          <div class="w-full py-6 px-8 bg-gray-100 text-xl font-bold rounded-2xl flex items-center justify-center space-x-4">
-            <div class="animate-spin rounded-full h-8 w-8 border-4 border-accent-orange border-t-transparent"></div>
-            <span class="text-secondary-blue">Analyzing with AI...</span>
+            <button
+              v-if="!submitting"
+              type="submit"
+              class="flex-[2] btn-success py-3.5 text-base font-bold flex items-center justify-center space-x-2"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Submit for AI Verification</span>
+            </button>
+
+            <div v-else class="flex-[2] flex flex-col gap-2">
+              <div class="py-3.5 bg-gray-100 font-bold rounded-xl flex items-center justify-center space-x-3">
+                <div class="animate-spin rounded-full h-5 w-5 border-[3px] border-accent-orange border-t-transparent"></div>
+                <span class="text-secondary-blue text-sm">Analyzing with AI...</span>
+              </div>
+              <button @click.prevent="cancelSubmission" type="button"
+                class="py-2 border-2 border-red-300 text-red-500 font-semibold rounded-xl hover:bg-red-50 transition-colors text-sm flex items-center justify-center space-x-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <span>Cancel</span>
+              </button>
+            </div>
           </div>
-          <button
-            @click.prevent="cancelSubmission"
-            type="button"
-            class="w-full py-3 px-6 bg-white border-2 border-red-500 text-red-600 font-semibold rounded-xl hover:bg-red-50 transition-colors flex items-center justify-center space-x-2"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span>Cancel Submission</span>
-          </button>
         </div>
       </div>
 
-      <!-- Result Message - BIG and PROMINENT -->
+      <!-- Result Message -->
       <transition name="fade">
-        <div v-if="result" class="p-8 rounded-2xl border-4 shadow-2xl" :class="{
+        <div v-if="result" class="mt-6 p-5 sm:p-6 rounded-2xl border-2" :class="{
           'bg-green-50 border-success-green': (result.final_status || result.prediction_label) === 'genuine',
           'bg-red-50 border-danger-red': (result.final_status || result.prediction_label) === 'fake'
         }">
-          <div class="flex items-start space-x-4">
-            <div class="flex-shrink-0">
-              <svg v-if="(result.final_status || result.prediction_label) === 'genuine'" class="w-16 h-16 text-success-green" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-              </svg>
-              <svg v-else class="w-16 h-16 text-danger-red" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-              </svg>
+          <div class="flex items-start space-x-3 sm:space-x-4">
+            <div class="flex-shrink-0 mt-0.5">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center" :class="{
+                'bg-green-100': (result.final_status || result.prediction_label) === 'genuine',
+                'bg-red-100': (result.final_status || result.prediction_label) === 'fake'
+              }">
+                <svg v-if="(result.final_status || result.prediction_label) === 'genuine'" class="w-7 h-7 text-success-green" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <svg v-else class="w-7 h-7 text-danger-red" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </div>
             </div>
-            <div class="flex-1">
-              <h4 class="text-3xl font-bold mb-3" :class="{
+            <div class="flex-1 min-w-0">
+              <h4 class="text-lg sm:text-xl font-bold mb-1" :class="{
                 'text-success-green': (result.final_status || result.prediction_label) === 'genuine',
                 'text-danger-red': (result.final_status || result.prediction_label) === 'fake'
               }">
-                {{ (result.final_status || result.prediction_label) === 'genuine' ? '✅ Claim Approved!' : '❌ Claim Rejected' }}
+                {{ (result.final_status || result.prediction_label) === 'genuine' ? 'Claim Approved!' : 'Claim Rejected' }}
               </h4>
-              <p class="text-lg mb-4" :class="{
+              <p class="text-sm mb-3" :class="{
                 'text-green-700': (result.final_status || result.prediction_label) === 'genuine',
                 'text-red-700': (result.final_status || result.prediction_label) === 'fake'
               }">
                 {{ result.message }}
               </p>
-              
-              <!-- Score Breakdown -->
-              <div class="flex flex-wrap items-center gap-3">
-                <!-- Combined Score (if images were verified) -->
-                <span v-if="result.combined_score !== undefined" class="badge text-base px-4 py-2 font-bold" :class="{
+              <div class="flex flex-wrap items-center gap-2">
+                <span v-if="result.combined_score !== undefined" class="badge text-xs px-3 py-1 font-bold" :class="{
                   'badge-success': result.combined_score >= 80,
                   'badge-danger': result.combined_score < 80
                 }">
-                  🎯 Combined Score: {{ result.combined_score.toFixed(1) }}%
+                  🎯 Combined: {{ result.combined_score.toFixed(1) }}%
                 </span>
-                
-                <!-- ML Confidence -->
-                <span class="badge badge-info text-base px-4 py-2">
+                <span class="badge badge-info text-xs px-3 py-1">
                   🤖 ML: {{ (result.confidence * 100).toFixed(1) }}%
                 </span>
-                
-                <!-- Image Verification Score (if available) -->
-                <span v-if="result.image_verification" class="badge badge-warning text-base px-4 py-2">
+                <span v-if="result.image_verification" class="badge badge-warning text-xs px-3 py-1">
                   📸 Image: {{ result.image_verification.score.toFixed(1) }}%
                 </span>
-                
-                <!-- Claim ID -->
-                <span class="badge badge-info text-base px-4 py-2">
-                  Claim ID: #{{ result.claim_id }}
+                <span class="badge badge-info text-xs px-3 py-1">
+                  #{{ result.claim_id }}
                 </span>
               </div>
             </div>
@@ -353,15 +381,13 @@
 
       <!-- Error Message -->
       <transition name="fade">
-        <div v-if="error" class="p-6 bg-red-50 border-2 border-red-200 rounded-xl">
-          <div class="flex items-start">
-            <svg class="w-8 h-8 text-danger-red mt-0.5 mr-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-            </svg>
-            <div>
-              <p class="font-bold text-danger-red text-lg">Error Submitting Claim</p>
-              <p class="text-red-700">{{ error }}</p>
-            </div>
+        <div v-if="error" class="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start space-x-3">
+          <svg class="w-5 h-5 text-danger-red mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <div>
+            <p class="font-bold text-danger-red text-sm">Error Submitting Claim</p>
+            <p class="text-red-700 text-sm">{{ error }}</p>
           </div>
         </div>
       </transition>
@@ -390,6 +416,17 @@ const emit = defineEmits(['claim-submitted']);
 const { showSuccess, showError } = useToast();
 
 const today = new Date().toISOString().split('T')[0];
+
+// Step navigation
+const currentStep = ref(0);
+const steps = ['Hospital Stay', 'Diagnosis & Billing', 'Documents & Submit'];
+
+const nextStep = () => {
+  if (currentStep.value < steps.length - 1) currentStep.value++;
+};
+const prevStep = () => {
+  if (currentStep.value > 0) currentStep.value--;
+};
 
 const formData = ref({
   user_id: props.userId,
@@ -602,5 +639,14 @@ const submitClaim = async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>

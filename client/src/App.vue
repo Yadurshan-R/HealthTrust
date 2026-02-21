@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-light-gray">
+  <div class="min-h-screen bg-light-gray bg-mesh">
     <!-- Navigation Bar -->
     <NavBar
       @wallet-connected="onWalletConnected"
@@ -7,48 +7,80 @@
     />
 
     <!-- Main Container -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Header -->
-      <div class="text-center mb-10">
-        <div class="flex items-center justify-center space-x-4 mb-4">
-          <img src="/healthtrust-logo.png" alt="HealthTrust Logo" class="w-12 h-12" />
-          <h1 class="text-3xl md:text-4xl font-bold text-main-blue">HealthTrust</h1>
-        </div>
-        <p class="text-lg text-secondary-blue font-medium">Decentralized Health Insurance • AI-Powered Fraud Detection</p>
-        <div class="flex items-center justify-center space-x-3 mt-4">
-          <div class="w-3 h-3 rounded-full bg-success-green animate-pulse"></div>
-          <span class="text-base text-dark-gray font-medium">Preprod Testnet • AI Model Active</span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+      <!-- Hero Section (Before Connect) -->
+      <div v-if="!isConnected" class="mb-8 sm:mb-12">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-main-blue via-main-blue/95 to-main-green p-8 sm:p-12 lg:p-16 text-white">
+          <!-- Decorative elements -->
+          <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+          <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+          <div class="absolute top-1/2 right-1/4 w-32 h-32 bg-accent-orange/10 rounded-full animate-float"></div>
+
+          <div class="relative z-10 max-w-2xl">
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="w-2 h-2 rounded-full bg-success-green animate-pulse"></div>
+              <span class="text-sm font-medium text-white/80">AI Model Active • Cardano Preprod</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
+              Decentralized<br />
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-white to-emerald-300">Health Insurance</span>
+            </h1>
+            <p class="text-base sm:text-lg text-white/70 mb-8 max-w-lg leading-relaxed">
+              AI-powered fraud detection with immutable Cardano blockchain verification. Connect your wallet to submit and manage insurance claims.
+            </p>
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur rounded-full text-sm">
+                <span>🤖</span><span>ML Fraud Detection</span>
+              </div>
+              <div class="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur rounded-full text-sm">
+                <span>⛓️</span><span>Blockchain Verified</span>
+              </div>
+              <div class="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur rounded-full text-sm">
+                <span>📸</span><span>Image Verification</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-
-
-      <!-- Connected Wallet Info Card (Shown when connected) -->
+      <!-- Connected Wallet Info Card -->
       <transition name="fade">
-        <div v-if="isConnected && userData" class="mb-10">
-          <div class="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-success-green">
-            <div class="flex items-center justify-between mb-6">
-              <div>
-                <h2 class="text-xl font-semibold text-success-green mb-1">✅ Wallet Connected</h2>
-                <p class="text-sm text-secondary-blue">You can now submit claims and manage your insurance</p>
+        <div v-if="isConnected && userData" class="mb-8 sm:mb-10">
+          <div class="relative overflow-hidden bg-white rounded-2xl shadow-lg border border-gray-100">
+            <!-- Top gradient accent -->
+            <div class="h-1.5 bg-gradient-to-r from-success-green via-main-green to-main-blue"></div>
+            <div class="p-5 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-5 gap-3">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-success-green to-main-green flex items-center justify-center shadow-md">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 class="text-lg font-bold text-gray-900">Welcome, {{ userData.name }}!</h2>
+                    <p class="text-sm text-secondary-blue">Wallet connected & ready</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
-                <div class="text-xs text-secondary-blue mb-1">Name</div>
-                <div class="text-base font-semibold text-main-blue">{{ userData.name }}</div>
-              </div>
-              <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
-                <div class="text-xs text-secondary-blue mb-1">Wallet</div>
-                <div class="text-base font-semibold text-main-green">{{ connectedWalletName }}</div>
-              </div>
-              <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
-                <div class="text-xs text-secondary-blue mb-1">Policy Expiry</div>
-                <div class="text-base font-semibold text-purple-700">{{ new Date(userData.expiry_date).toLocaleDateString() }}</div>
-              </div>
-              <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4">
-                <div class="text-xs text-secondary-blue mb-1">Premium</div>
-                <div class="text-base font-semibold text-accent-orange">₳{{ userData.premium }}</div>
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 sm:p-4 border border-blue-100">
+                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Patient</div>
+                  <div class="text-sm sm:text-base font-bold text-main-blue truncate">{{ userData.name }}</div>
+                </div>
+                <div class="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl p-3 sm:p-4 border border-green-100">
+                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Wallet</div>
+                  <div class="text-sm sm:text-base font-bold text-main-green truncate">{{ connectedWalletName }}</div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-3 sm:p-4 border border-purple-100">
+                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Expiry</div>
+                  <div class="text-sm sm:text-base font-bold text-purple-700">{{ new Date(userData.expiry_date).toLocaleDateString() }}</div>
+                </div>
+                <div class="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-xl p-3 sm:p-4 border border-orange-100">
+                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Premium</div>
+                  <div class="text-sm sm:text-base font-bold text-accent-orange">₳{{ userData.premium }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -56,22 +88,24 @@
       </transition>
 
       <!-- Recent Activity Feed (Public - Only visible when NOT connected) -->
-      <div v-if="!isConnected" class="mb-10">
+      <div v-if="!isConnected" class="mb-8 sm:mb-10">
         <RecentActivity />
       </div>
 
       <!-- Connected View -->
       <transition name="fade">
-        <div v-if="isConnected && userData" class="space-y-8">
+        <div v-if="isConnected && userData" class="space-y-6 sm:space-y-8">
           <!-- Dashboard Stats -->
           <div>
-            <h3 class="text-2xl font-bold text-main-blue mb-6 flex items-center space-x-3">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-main-blue to-main-green flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
               <span>Dashboard Overview</span>
             </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <StatusCard
                 title="Total Claims"
                 :count="claimStats.total"
@@ -105,8 +139,8 @@
 
           <!-- Action Cards -->
           <div>
-            <h3 class="text-2xl font-bold text-main-blue dark:text-blue-400 mb-6">Quick Actions</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Quick Actions</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <ActionCard
                 title="Submit New Claim"
                 description="File a new insurance claim for AI verification"
@@ -115,7 +149,7 @@
                 @click="toggleClaimForm"
               >
                 <template #actions>
-                  <button class="btn-primary text-sm px-4 py-2">
+                  <button class="btn-primary text-sm px-5 py-2.5">
                     {{ showClaimForm ? '✖ Close Form' : '📋 Open Form' }}
                   </button>
                 </template>
@@ -129,7 +163,7 @@
                 @click="showHistoryModal = true"
               >
                 <template #actions>
-                  <button class="btn-secondary text-sm px-4 py-2">
+                  <button class="btn-secondary text-sm px-5 py-2.5">
                     📜 View History
                   </button>
                 </template>
@@ -162,6 +196,12 @@
         </div>
       </transition>
 
+      <!-- Footer -->
+      <footer class="mt-12 sm:mt-16 pb-8 text-center">
+        <div class="border-t border-gray-200 pt-6">
+          <p class="text-xs sm:text-sm text-dark-gray">Built with ❤️ on Cardano • HealthTrust © {{ new Date().getFullYear() }}</p>
+        </div>
+      </footer>
 
     </div>
   </div>

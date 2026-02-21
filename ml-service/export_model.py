@@ -27,12 +27,12 @@ print("EXPORTING MODEL FOR CARDANO INSURANCE DAPP")
 print("=" * 70)
 
 # Load dataset
-csv_files = glob.glob('../*.csv')
-if not csv_files:
-    raise FileNotFoundError("No CSV file found. Please ensure simulated_healthcare_claims.csv is in parent directory.")
+csv_path = Path('../data/healthcare_claims.csv')
+if not csv_path.exists():
+    raise FileNotFoundError("No CSV file found. Please ensure data/healthcare_claims.csv exists in project root.")
 
-data = pd.read_csv(csv_files[0])
-print(f"✓ Loaded: {csv_files[0]} | Shape: {data.shape}")
+data = pd.read_csv(csv_path)
+print(f"✓ Loaded: {csv_path} | Shape: {data.shape}")
 
 # Feature Engineering (matching notebook)
 data['FraudStatus'] = (data['Fraud Type'] != 'No Fraud').astype(int)

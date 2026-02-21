@@ -1,5 +1,4 @@
 # Sensitive files
-passwords.md
 *.mnemonic
 *.key
 .env
@@ -50,3 +49,7 @@ Thumbs.db
 *.log
 logs/
 client/.vite/
+
+# Misc
+*.bak
+*.tmp

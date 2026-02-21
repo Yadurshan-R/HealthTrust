@@ -12,10 +12,9 @@ pub type InsuranceRedeemer {
   Void
 }
 
-/// Treasury public key hash
-/// TODO: Replace with actual treasury public key hash from your wallet
+/// Treasury public key hash (extracted from treasury wallet address)
 const treasury_pkh: Hash<Blake2b_256, VerificationKey> =
-  #"0000000000000000000000000000000000000000000000000000000000000000"
+  #"9b9460c4940fc92d01be70d036ce43f86adcff75ec043517186c5057"
 
 /// Insurance Gatekeeper Validator
 ///

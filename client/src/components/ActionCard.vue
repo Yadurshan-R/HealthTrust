@@ -1,41 +1,45 @@
 <template>
   <div
-    class="bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer border-t-4 p-6"
-    :class="borderColorClass"
+    class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-100 overflow-hidden group"
     @click="$emit('click')"
   >
-    <!-- Icon -->
-    <div class="flex justify-center mb-4">
-      <div
-        class="w-16 h-16 rounded-full flex items-center justify-center shadow-md"
-        :class="iconBgClass"
-      >
-        <component
-          :is="iconComponent"
-          class="w-8 h-8"
-          :class="iconColorClass"
-        />
+    <!-- Top accent bar -->
+    <div class="h-1" :class="accentBarClass"></div>
+    
+    <div class="p-5 sm:p-6">
+      <!-- Icon -->
+      <div class="flex justify-center mb-4">
+        <div
+          class="w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+          :class="iconBgClass"
+        >
+          <component
+            :is="iconComponent"
+            class="w-7 h-7"
+            :class="iconColorClass"
+          />
+        </div>
       </div>
-    </div>
 
-    <!-- Title -->
-    <h3 class="text-lg font-semibold text-center text-main-blue mb-2">
-      {{ title }}
-    </h3>
+      <!-- Title -->
+      <h3 class="text-base sm:text-lg font-bold text-center text-gray-900 mb-1.5">
+        {{ title }}
+      </h3>
 
-    <!-- Description -->
-    <p class="text-sm text-secondary-blue text-center mb-4">
-      {{ description }}
-    </p>
+      <!-- Description -->
+      <p class="text-xs sm:text-sm text-secondary-blue text-center mb-4 leading-relaxed">
+        {{ description }}
+      </p>
 
-    <!-- Custom Content Slot -->
-    <div v-if="$slots.content" class="mt-4">
-      <slot name="content"></slot>
-    </div>
+      <!-- Custom Content Slot -->
+      <div v-if="$slots.content" class="mt-4">
+        <slot name="content"></slot>
+      </div>
 
-    <!-- Actions Slot -->
-    <div v-if="$slots.actions" class="mt-6 flex justify-center gap-3">
-      <slot name="actions"></slot>
+      <!-- Actions Slot -->
+      <div v-if="$slots.actions" class="mt-5 flex justify-center gap-3">
+        <slot name="actions"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -92,6 +96,16 @@ const borderColorClass = computed(() => {
     warning: 'border-warning-yellow',
   };
   return colors[props.variant] || 'border-main-blue';
+});
+
+const accentBarClass = computed(() => {
+  const colors = {
+    primary: 'bg-gradient-to-r from-main-blue to-main-blue/60',
+    success: 'bg-gradient-to-r from-main-green to-main-green/60',
+    info: 'bg-gradient-to-r from-accent-orange to-accent-orange/60',
+    warning: 'bg-gradient-to-r from-warning-yellow to-warning-yellow/60',
+  };
+  return colors[props.variant] || 'bg-gradient-to-r from-main-blue to-main-blue/60';
 });
 
 const iconBgClass = computed(() => {

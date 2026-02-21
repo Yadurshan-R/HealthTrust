@@ -322,6 +322,41 @@ async def get_model_info(model: FraudDetectionModel = Depends(get_model)):
     }
 
 
+@app.get("/recent-activity")
+async def get_recent_activity(
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """
+    Get recent processed claims for public display (before wallet connection).
+    Returns claims that have been completed (have a tx_hash) — no private user data exposed.
+    """
+    from sqlalchemy import desc
+
+    recent_claims = (
+        db.query(Claim)
+        .filter(Claim.tx_hash.isnot(None))
+        .order_by(desc(Claim.updated_at))
+        .limit(limit)
+        .all()
+    )
+
+    activities = []
+    for claim in recent_claims:
+        activities.append({
+            "claim_id": claim.id,
+            "status": "approved" if claim.ml_status == "genuine" else "rejected",
+            "amount": float(claim.amount_billed),
+            "diagnosis": claim.diagnosis,
+            "tx_hash": claim.tx_hash,
+            "payout_status": claim.payout_status,
+            "created_at": claim.created_at.isoformat() if claim.created_at else None,
+            "updated_at": claim.updated_at.isoformat() if claim.updated_at else None,
+        })
+
+    return {"transactions": activities, "count": len(activities)}
+
+
 @app.post("/verify-images")
 async def verify_images(
     claim_id: int = Form(...),

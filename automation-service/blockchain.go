@@ -16,6 +16,7 @@ const BlockchainServiceURL = "http://127.0.0.1:3001"
 type PayoutRequest struct {
 	RecipientAddress string                 `json:"recipientAddress"`
 	AmountLovelace   int64                  `json:"amountLovelace"`
+	HashedUserId     string                 `json:"hashedUserId"`
 	ClaimMetadata    map[string]interface{} `json:"claimMetadata"`
 }
 
@@ -64,10 +65,11 @@ func SubmitTransaction(claim Claim, hashedUserID string) (string, error) {
 		"hashed_id":    hashedUserID,
 	}
 
-	// Build request
+	// Build request (includes hashedUserId for Aiken smart contract datum)
 	payload := PayoutRequest{
 		RecipientAddress: claim.WalletAddress,
 		AmountLovelace:   lovelace,
+		HashedUserId:     hashedUserID,
 		ClaimMetadata:    metadata,
 	}
 
