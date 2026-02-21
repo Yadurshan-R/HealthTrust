@@ -55,7 +55,7 @@ echo -e "${BLUE}1️⃣  Starting ML Service (Port 8000)...${NC}"
 cd "$PROJECT_ROOT/ml-service"
 if [ -d "venv" ]; then
     source venv/bin/activate
-    nohup python app.py > /tmp/ml-service.log 2>&1 &
+    nohup python main.py > /tmp/ml-service.log 2>&1 &
     ML_PID=$!
     echo -e "${GREEN}   ✅ ML Service started (PID: $ML_PID)${NC}"
     echo -e "   📋 Logs: tail -f /tmp/ml-service.log"

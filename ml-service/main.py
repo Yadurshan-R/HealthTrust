@@ -238,6 +238,8 @@ async def get_user_by_wallet(
             'diagnosis': claim.diagnosis,
             'ml_status': claim.ml_status,
             'confidence': float(claim.confidence) if claim.confidence else None,  # ML confidence
+            'images': claim.images,  # Image verification status: 'genuine', 'fake', or None
+            'image_score': float(claim.image_score) if claim.image_score else None,  # Image score 0-100
             'payout_status': claim.payout_status,
             'tx_hash': claim.tx_hash,
             'block_height': claim.block_height,  # Blockchain block height
@@ -367,14 +369,20 @@ async def verify_images(
         # Calculate combined score (ML + Image average)
         combined_score = (ml_confidence_percent + image_score) / 2
         
+        # Determine final status based on combined score
+        final_status = "genuine" if combined_score >= 80 else "fake"
+        
         # Update claim with image verification results
         claim.images = image_status
         claim.image_score = image_score
+        
+        # CRITICAL: Update ml_status if combined score fails threshold
+        # This ensures frontend sees the claim as fake and hides the payout button
+        if combined_score < 80:
+            claim.ml_status = "fake"
+        
         db.commit()
         db.refresh(claim)
-        
-        # Determine final status based on combined score
-        final_status = "genuine" if combined_score >= 80 else "fake"
         
         # Terminal output
         print(f"\n📊 IMAGE VERIFICATION RESULTS:")

@@ -283,7 +283,7 @@ const refreshUserData = async () => {
     showSuccess(`Welcome back, ${userData.value.name}! 👋`);
   } catch (err) {
     // Fallback to Alice's address for demo
-    const fallbackAddress = 'addr_test1qzq4shjtucyrpmu32r7k3jts2aavsww4mhv49cv4z7xzl59frgwp30a6ewt0tq7j3qauthetrzw2z2p6pz979ztrt5msu9ewkn';
+    const fallbackAddress = 'addr_test1qpfr77c777y9a0x3hj4fqev30ak5j7csw4r9rvfsd768tsqpdtwek63hnds2hwqevj2jhh88qmrzyw3anz44ecx0k3dq8wkuny';
     try {
       userData.value = await api.getUserByWallet(fallbackAddress);
       connectedAddress.value = fallbackAddress;
