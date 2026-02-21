@@ -1,0 +1,121 @@
+# ============================================================================
+# HealthTrust — Production Nginx Configuration
+# Serves Vue SPA, proxies /api → Python ML, /service → Blockchain
+# ============================================================================
+
+# Rate limiting zones
+limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=general:10m rate=30r/s;
+
+# HTTP → HTTPS redirect
+server {
+    listen 80;
+    listen [::]:80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    # ACME challenge for Let's Encrypt
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# Main HTTPS server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name yourdomain.com www.yourdomain.com;
+
+    # ---------- TLS (Let's Encrypt / Certbot) ----------
+    ssl_certificate     /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5:!RC4;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # ---------- Security Headers ----------
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    # ---------- Logging ----------
+    access_log /var/log/nginx/healthtrust_access.log;
+    error_log  /var/log/nginx/healthtrust_error.log;
+
+    # ---------- Client body size (for image uploads) ----------
+    client_max_body_size 20M;
+
+    # ==========================================================================
+    # ROUTE 1: / → Vue.js Frontend (Static Build)
+    # ==========================================================================
+    root /var/www/healthtrust/dist;
+    index index.html;
+
+    location / {
+        limit_req zone=general burst=20 nodelay;
+        try_files $uri $uri/ /index.html;
+
+        # Cache static assets
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+            expires 30d;
+            add_header Cache-Control "public, immutable";
+        }
+    }
+
+    # ==========================================================================
+    # ROUTE 2: /api → Python FastAPI ML Service (127.0.0.1:8000)
+    # ==========================================================================
+    location /api/ {
+        limit_req zone=api_limit burst=10 nodelay;
+
+        # Strip /api prefix — FastAPI routes don't have /api
+        rewrite ^/api/(.*) /$1 break;
+
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Timeouts for image verification (GPT-4o calls can be slow)
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout 60s;
+    }
+
+    # ==========================================================================
+    # ROUTE 3: /service → Node.js Blockchain Service (127.0.0.1:3001)
+    # ==========================================================================
+    location /service/ {
+        limit_req zone=api_limit burst=5 nodelay;
+
+        # Strip /service prefix
+        rewrite ^/service/(.*) /$1 break;
+
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 60s;
+        proxy_connect_timeout 10s;
+    }
+
+    # ---------- Block sensitive files ----------
+    location ~ /\. {
+        deny all;
+    }
+
+    location ~* \.(env|sql|md|toml|mod|sum)$ {
+        deny all;
+    }
+}

@@ -118,6 +118,21 @@ app.post('/api/payout-transaction', async (req: Request, res: Response) => {
             });
         }
 
+        // Helper: wrap any promise with a timeout so MeshSDK can't hang forever
+        const withTimeout = <T>(promise: Promise<T>, ms: number, label: string): Promise<T> => {
+            return Promise.race([
+                promise,
+                new Promise<T>((_, reject) =>
+                    setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s`)), ms)
+                )
+            ]);
+        };
+
+        // Re-initialize wallet UTXOs (clear stale cache)
+        console.log('   Refreshing wallet UTXOs...');
+        const utxos = await withTimeout(wallet.getUtxos(), 30000, 'getUtxos');
+        console.log(`   Found ${utxos.length} UTXOs`);
+
         // Build transaction
         const tx = new Transaction({ initiator: wallet });
 
@@ -137,13 +152,13 @@ app.post('/api/payout-transaction', async (req: Request, res: Response) => {
         });
 
         console.log('   Building transaction...');
-        const unsignedTx = await tx.build();
+        const unsignedTx = await withTimeout(tx.build(), 60000, 'tx.build');
 
         console.log('   Signing transaction...');
-        const signedTx = await wallet.signTx(unsignedTx);
+        const signedTx = await withTimeout(wallet.signTx(unsignedTx), 15000, 'signTx');
 
         console.log('   Submitting to Cardano network...');
-        const txHash = await wallet.submitTx(signedTx);
+        const txHash = await withTimeout(wallet.submitTx(signedTx), 60000, 'submitTx');
 
         const explorerUrl = `https://${config.network}.cardanoscan.io/transaction/${txHash}`;
 
@@ -268,11 +283,12 @@ app.get('/api/balance', async (req: Request, res: Response) => {
 });
 
 // Start server
-app.listen(config.port, () => {
+const port = Number(config.port);
+app.listen(port, '127.0.0.1', () => {
     console.log('\n' + '='.repeat(60));
     console.log('🚀 Blockchain Service Started Successfully!');
     console.log('='.repeat(60));
-    console.log(`📡 Server: http://localhost:${config.port}`);
+    console.log(`📡 Server: http://127.0.0.1:${config.port}`);
     console.log(`🌐 Network: ${config.network.toUpperCase()}`);
     console.log(`💰 Treasury: ${config.treasuryAddress}`);
     console.log('='.repeat(60));

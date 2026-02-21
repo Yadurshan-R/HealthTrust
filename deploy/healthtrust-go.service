@@ -1,0 +1,31 @@
+[Unit]
+Description=HealthTrust Go Automation Service (Cardano Payout Poller)
+After=network.target postgresql.service healthtrust-blockchain.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=healthtrust
+Group=healthtrust
+WorkingDirectory=/opt/healthtrust/automation-service
+EnvironmentFile=/opt/healthtrust/.env
+ExecStart=/opt/healthtrust/automation-service/automation-service
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/healthtrust/automation-service
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=healthtrust-go
+
+[Install]
+WantedBy=multi-user.target

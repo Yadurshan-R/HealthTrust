@@ -4,7 +4,7 @@
       <div class="p-6">
         <!-- Loading State -->
         <div v-if="loading" class="flex flex-col items-center justify-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-4 border-accent-orange border-t-transparent mb-4"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-main-green border-t-transparent mb-4"></div>
           <p class="text-secondary-blue font-medium">Loading transaction details...</p>
         </div>
 
@@ -26,7 +26,7 @@
         <!-- Transaction Details -->
         <div v-else class="space-y-6">
           <!-- Header: Transaction Hash -->
-          <div class="bg-gradient-to-r from-main-blue to-accent-orange p-6 rounded-xl text-white">
+          <div class="bg-gradient-to-r from-main-blue to-main-green p-6 rounded-xl text-white">
             <div class="flex items-center justify-between mb-3">
               <h3 class="text-lg font-semibold">Blockchain Transaction</h3>
               <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-medium">
@@ -255,18 +255,14 @@ const fetchBlockchainData = async () => {
   
   fetchingBlockchain.value = true;
   try {
-    // Blockfrost API for Cardano Preprod
-    const response = await fetch(`https://cardano-preprod.blockfrost.io/api/v0/txs/${props.txHash}`, {
-      headers: {
-        'project_id': 'preprodR5oowiHvF2fslKD8fpzQi63yl9L3HvQv' // Preprod project ID
-      }
-    });
+    // Fetch from our own blockchain service via Nginx reverse proxy
+    const response = await fetch(`/service/api/transaction/${props.txHash}`);
     
     if (response.ok) {
       const data = await response.json();
       blockchainData.value = {
-        block_height: data.block_height,
-        block_time: data.block_time,
+        block_height: data.blockHeight,
+        block_time: data.blockTimestamp,
         confirmations: data.confirmations || 0,
         slot: data.slot,
         fees: data.fees,

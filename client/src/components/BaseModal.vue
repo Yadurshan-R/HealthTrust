@@ -10,7 +10,7 @@
           class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in slide-in-from-bottom-4 duration-300"
         >
           <!-- Header -->
-          <div class="bg-gradient-to-r from-main-blue to-accent-orange p-6 text-white flex items-center justify-between">
+          <div class="bg-gradient-to-r from-main-blue to-main-green p-6 text-white flex items-center justify-between">
             <slot name="title">
               <h2 class="text-2xl font-bold">{{ title }}</h2>
             </slot>

@@ -1,0 +1,72 @@
+# ============================================================================
+# HealthTrust — Local Test Nginx Configuration (HTTP only, no TLS)
+# ============================================================================
+
+# Rate limiting zones
+limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=general:10m rate=30r/s;
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name localhost;
+
+    # ---------- Logging ----------
+    access_log /var/log/nginx/healthtrust_access.log;
+    error_log  /var/log/nginx/healthtrust_error.log;
+
+    # ---------- Client body size (for image uploads) ----------
+    client_max_body_size 20M;
+
+    # ==========================================================================
+    # ROUTE 1: / → Vue.js Frontend (Static Build)
+    # ==========================================================================
+    root /home/yadu/Development/My_FYP/model_1/client/dist;
+    index index.html;
+
+    location / {
+        limit_req zone=general burst=20 nodelay;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # ==========================================================================
+    # ROUTE 2: /api → Python FastAPI ML Service (127.0.0.1:8000)
+    # ==========================================================================
+    location /api/ {
+        limit_req zone=api_limit burst=10 nodelay;
+
+        # Strip /api prefix — FastAPI routes don't have /api
+        rewrite ^/api/(.*) /$1 break;
+
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Timeouts for image verification (GPT-4o calls can be slow)
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout 60s;
+    }
+
+    # ==========================================================================
+    # ROUTE 3: /service → Node.js Blockchain Service (127.0.0.1:3001)
+    # ==========================================================================
+    location /service/ {
+        limit_req zone=api_limit burst=5 nodelay;
+
+        # Strip /service prefix
+        rewrite ^/service/(.*) /$1 break;
+
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 60s;
+        proxy_connect_timeout 10s;
+    }
+}

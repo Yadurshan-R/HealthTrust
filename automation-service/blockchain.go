@@ -10,7 +10,7 @@ import (
 )
 
 // BlockchainService configuration
-const BlockchainServiceURL = "http://localhost:3001"
+const BlockchainServiceURL = "http://127.0.0.1:3001"
 
 // PayoutRequest matches the blockchain service API
 type PayoutRequest struct {
@@ -80,8 +80,8 @@ func SubmitTransaction(claim Claim, hashedUserID string) (string, error) {
 	log.Printf("   📤 Sending %d lovelace (%.2f ADA) to %s",
 		lovelace, claim.AmountBilled, claim.WalletAddress[:20]+"...")
 
-	// Make HTTP POST request
-	client := &http.Client{Timeout: 30 * time.Second}
+	// Make HTTP POST request (120s timeout: TX build + sign + submit to Cardano)
+	client := &http.Client{Timeout: 120 * time.Second}
 	resp, err := client.Post(
 		BlockchainServiceURL+"/api/payout-transaction",
 		"application/json",

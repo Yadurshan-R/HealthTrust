@@ -1,0 +1,30 @@
+[Unit]
+Description=HealthTrust Blockchain Service (Node.js/Express + MeshSDK)
+After=network.target
+
+[Service]
+Type=simple
+User=healthtrust
+Group=healthtrust
+WorkingDirectory=/opt/healthtrust/server/blockchain-service
+EnvironmentFile=/opt/healthtrust/.env
+ExecStart=/usr/bin/node -r ts-node/register src/app.ts
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/healthtrust/server/blockchain-service
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=healthtrust-blockchain
+
+[Install]
+WantedBy=multi-user.target
