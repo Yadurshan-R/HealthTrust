@@ -389,8 +389,11 @@ const refreshUserData = async () => {
 
     // Check if this is a new auto-registered user (name starts with "User_")
     if (userData.value.name.startsWith('User_')) {
-      showProfileSetup.value = true;
-      showInfo('Welcome! Please set up your profile to get started.');
+      // Small delay to ensure the connected view renders first
+      setTimeout(() => {
+        showProfileSetup.value = true;
+        showInfo('Welcome! Please set up your profile to get started.');
+      }, 500);
     } else {
       showSuccess(`Welcome back, ${userData.value.name}! 👋`);
     }

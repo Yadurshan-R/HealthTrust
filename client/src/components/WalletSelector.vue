@@ -268,13 +268,18 @@ const connectWallet = async (walletKey) => {
       console.warn('⚠️ Connected to mainnet - application expects testnet');
     }
 
-    // Get used addresses - wallet APIs return hex-encoded addresses
-    const usedAddressesHex = await walletAPI.getUsedAddresses();
-    if (!usedAddressesHex || usedAddressesHex.length === 0) {
-      throw new Error('No addresses found in wallet. Please ensure your wallet has transactions.');
+    // Get addresses - wallet APIs return hex-encoded addresses
+    // Try getUsedAddresses first, fall back to getUnusedAddresses for new wallets
+    let addressesHex = await walletAPI.getUsedAddresses();
+    if (!addressesHex || addressesHex.length === 0) {
+      console.log('⚠️ No used addresses, trying unused addresses (new wallet)...');
+      addressesHex = await walletAPI.getUnusedAddresses();
+    }
+    if (!addressesHex || addressesHex.length === 0) {
+      throw new Error('No addresses found in wallet. Please create an account in your wallet extension first.');
     }
     
-    const rawHex = usedAddressesHex[0];
+    const rawHex = addressesHex[0];
     console.log('🔍 Raw address from wallet:', rawHex);
     
     // Convert hex address to bech32 format
@@ -390,6 +395,9 @@ const tryReconnect = async () => {
         walletAddress.value = savedAddress;
         connectedWalletName.value = savedName || savedWallet;
         isConnected.value = true;
+        
+        // Emit event so App.vue fetches user data and shows profile modal if needed
+        emit('wallet-connected', { wallet: null, address: savedAddress, name: savedName || savedWallet });
         
         console.log(`✅ Auto-reconnected to ${savedWallet}`);
       } catch (err) {
