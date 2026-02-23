@@ -1,4 +1,4 @@
-# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 Healthcare Insurance Fraud Detection dApp
+# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 Healthcare Insurance Fraud Detection dApp
 
 
 
@@ -6,27 +6,31 @@
 
 
 
-[![Cardano](https://img.shields.io/badge/Cardano-Preprod_Testnet-blue)](https://preprod.cardanoscan.io)[![Cardano](https://img.shields.io/badge/Cardano-Preprod_Testnet-blue)](https://preprod.cardanoscan.io)**AI-Powered Insurance Claims Processing on Cardano Blockchain**
+[![Cardano](https://img.shields.io/badge/Cardano-Preprod_Testnet-blue)](https://preprod.cardanoscan.io)**Final Year Project** — Decentralized Healthcare Insurance Claims Processing
 
 [![ML Accuracy](https://img.shields.io/badge/ML_Accuracy-86.3%25-green)](ml-service/)
 
-[![Vue 3](https://img.shields.io/badge/Frontend-Vue_3-42b883)](client/)[![ML Model](https://img.shields.io/badge/ML_Accuracy-86.3%25-green)](ml-service/)
+[![Vue 3](https://img.shields.io/badge/Frontend-Vue_3-42b883)](client/)
 
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-[![Vue 3](https://img.shields.io/badge/Frontend-Vue_3-42b883)](client/)[![Cardano](https://img.shields.io/badge/Cardano-Preprod-blue)](https://preprod.cardanoscan.io)
+[![Cardano](https://img.shields.io/badge/Cardano-Preprod_Testnet-blue)](https://preprod.cardanoscan.io)[![Cardano](https://img.shields.io/badge/Cardano-Preprod_Testnet-blue)](https://preprod.cardanoscan.io)**AI-Powered Insurance Claims Processing on Cardano Blockchain**
+
+> 🌐 **Live App:** [http://178.128.212.100](http://178.128.212.100)
+
+[![ML Accuracy](https://img.shields.io/badge/ML_Accuracy-86.3%25-green)](ml-service/)
 
 ---
 
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)[![ML Model](https://img.shields.io/badge/ML%20Accuracy-86.3%25-green)](ml-service/)
+[![Vue 3](https://img.shields.io/badge/Frontend-Vue_3-42b883)](client/)[![ML Model](https://img.shields.io/badge/ML_Accuracy-86.3%25-green)](ml-service/)
 
-## 🎯 Overview
+## 🎯 What Is HealthTrust?
 
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-HealthTrust is a decentralized insurance application that combines **AI fraud detection** with **Cardano blockchain** to automate claim verification and payouts. The system ensures transparency, immutability, and privacy.
+HealthTrust is a decentralized health insurance application built on the **Cardano blockchain**. It allows anyone with a Cardano wallet to submit insurance claims, get them verified by an AI model, and receive automated payouts in real ADA — all transparently recorded on-chain.
 
-A decentralized insurance application that combines **AI fraud detection** with **Cardano blockchain** to automate claim verification and payouts. The system ensures transparency, immutability, and privacy while maintaining high accuracy in fraud detection.
+[![Vue 3](https://img.shields.io/badge/Frontend-Vue_3-42b883)](client/)[![Cardano](https://img.shields.io/badge/Cardano-Preprod-blue)](https://preprod.cardanoscan.io)
 
 ### How It Works
 
@@ -34,407 +38,841 @@ A decentralized insurance application that combines **AI fraud detection** with 
 
 ```
 
-Patient submits claim → ML model checks for fraud (86.3% accuracy)> **Final Year Project** — AI-Powered Healthcare Insurance Fraud Detection on Blockchain
+1. Connect your Cardano wallet (Nami, Eternl, or Lace)[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)[![ML Model](https://img.shields.io/badge/ML%20Accuracy-86.3%25-green)](ml-service/)
 
-    → If approved → Go automation triggers blockchain payout
+2. Set up your profile (name, age, gender)
 
-        → Treasury wallet sends ADA to patient's Cardano wallet## 🎯 Project Overview
+3. Submit an insurance claim with hospital stay & diagnosis details## 🎯 Overview
 
-            → On-chain metadata records the claim details permanently
+4. AI model predicts whether the claim is genuine or fraudulent (86.3% accuracy)
 
-```---
+5. Optionally upload prescription + receipt images → GPT-4o Vision verifies them[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
+6. If approved → click "Claim Amount" to trigger a blockchain payout
 
+7. Within 60 seconds, real ADA is sent to your wallet from the treasuryHealthTrust is a decentralized insurance application that combines **AI fraud detection** with **Cardano blockchain** to automate claim verification and payouts. The system ensures transparency, immutability, and privacy.
 
-### Key FeaturesA decentralized insurance application that uses **AI fraud detection** combined with **Cardano blockchain** to automate claim verification and payouts. The system ensures transparency, immutability, and privacy while maintaining high accuracy in fraud detection.
+8. Transaction is permanently recorded on Cardano Preprod with full metadata
 
-
-
-- 🤖 **AI Fraud Detection** — Gradient Boosting classifier trained on 30,000+ claims## ✨ Key Features
-
-- ⛓️ **Blockchain Payouts** — Automated on-chain ADA transactions via MeshSDK
-
-- 📜 **Aiken Smart Contract** — Plutus V3 Insurance Gatekeeper validator (compiled & deployed)### Key Features
-
-- 🔒 **Privacy Preserved** — Blake2b-256 hashing for user identity on public ledger
-
-- 📋 **On-Chain Records** — Every payout recorded with CIP-20 metadata (label 674)- **AI Fraud Detection** — 86.3% accuracy using Gradient Boosting classifier
-
-- ⚡ **60-Second Automation** — Go service continuously polls and processes approved claims
-
-- 🖼️ **Image Verification** — GPT-4o Vision compares prescriptions against pharmacy receipts- **Blockchain Payouts** — Automated on-chain transactions via MeshSDK on Cardano Preprod- ✅ **AI Fraud Detection** - 86.3% accuracy using Gradient Boosting
+```A decentralized insurance application that combines **AI fraud detection** with **Cardano blockchain** to automate claim verification and payouts. The system ensures transparency, immutability, and privacy while maintaining high accuracy in fraud detection.
 
 
 
----- **Image Verification** — GPT-4o Vision compares prescriptions against pharmacy receipts- ✅ **Blockchain Payouts** - Automated on-chain transactions via MeshSDK
+---### How It Works
 
 
 
-## 🏗️ Architecture- **Privacy Preserved** — Blake2b hashing for public payout records- ✅ **Privacy Preserved** - Blake2b hashing for user data
+## 🚀 How to Use the App---
 
 
 
-```- **Transparent Records** — All payouts immutably recorded on-chain (metadata label 674)- ✅ **Transparent Records** - All payouts recorded on Cardano Preprod
+### Step 1 — Get a Cardano Wallet```
 
-┌────────────────────────────────────────────────────────────┐
 
-│                     Nginx (port 80)                        │- **60-Second Automation** — Go service polls and processes approved payouts continuously- ✅ **Real-time Processing** - 60-second automation polling
 
-│   /  → Vue SPA     /api/ → Python :8000                   │
+Install one of these browser extensions and **switch to Preprod Testnet**:Patient submits claim → ML model checks for fraud (86.3% accuracy)> **Final Year Project** — AI-Powered Healthcare Insurance Fraud Detection on Blockchain
 
-│                     /service/ → Node.js :3001              │
 
-└──────┬──────────────────┬──────────────────┬───────────────┘
 
-       │                  │                  │------
+| Wallet | Link |    → If approved → Go automation triggers blockchain payout
 
-┌──────▼──────┐   ┌──────▼──────┐   ┌──────▼───────────────┐
+|--------|------|
 
-│  Vue 3 +    │   │  FastAPI    │   │  Express + MeshSDK   │
+| **Nami** | [namiwallet.io](https://namiwallet.io) |        → Treasury wallet sends ADA to patient's Cardano wallet## 🎯 Project Overview
 
-│  TailwindCSS│   │  ML Service │   │  Blockchain Service  │
+| **Eternl** | [eternl.io](https://eternl.io) |
 
-│  MeshSDK    │   │  Port 8000  │   │  Port 3001           │## 🏗️ Architecture## 🏗️ Architecture
+| **Lace** | [lace.io](https://lace.io) |            → On-chain metadata records the claim details permanently
 
-└─────────────┘   └──────┬──────┘   └──────┬───────────────┘
 
-                         │                 │
 
-                  ┌──────▼─────────────────▼────┐
+> ⚠️ You **must** be on **Cardano Preprod Testnet**, not Mainnet.```---
 
-                  │     PostgreSQL (5432)        │``````
 
-                  │     Database: HealthTrust    │
-
-                  └──────────────┬───────────────┘┌──────────────────────────────────────────────────────────────────┐┌─────────────────────────────────────────────────────────┐
-
-                                 │
-
-                  ┌──────────────▼───────────────┐│                        Nginx (port 80)                           ││                Vue 3 Frontend (client/)                 │
-
-                  │   Go Automation Service      │
-
-                  │   Polls DB → triggers payouts││  /  → Vue SPA    /api/ → Python :8000    /service/ → Node :3001  ││          User submits claims, views results             │
-
-                  │   every 60 seconds           │
-
-                  └──────────────────────────────┘└──────────┬───────────────┬───────────────────┬───────────────────┘└──────────┬──────────────────────────────────────────────┘
-
-```
-
-           │               │                   │           │
 
 ---
 
-    ┌──────▼──────┐ ┌──────▼──────┐  ┌─────────▼──────────┐           ├─────────────┬──────────────┬─────────────────┐
 
-## 📁 Project Structure
 
-    │  Vue 3 +    │ │  FastAPI    │  │  Express + MeshSDK  │           ▼             ▼              ▼                 ▼
+### Step 2 — Use a Pre-Loaded Test Wallet (or Your Own)### Key FeaturesA decentralized insurance application that uses **AI fraud detection** combined with **Cardano blockchain** to automate claim verification and payouts. The system ensures transparency, immutability, and privacy while maintaining high accuracy in fraud detection.
 
-| Service | Language | Framework | Port | Role |
 
-|---------|----------|-----------|------|------|    │  TailwindCSS│ │  ML Service │  │  Blockchain Service │    ┌──────────┐  ┌───────────┐  ┌───────────┐   ┌────────────┐
 
-| Frontend | Vue 3 | Vite + TailwindCSS + MeshSDK | — (Nginx) | User interface, wallet connection |
+I have created **3 test wallets** with pre-generated mnemonics that you can import directly into your wallet extension. These are ready to use on Preprod.
 
-| ML Service | Python 3.10 | FastAPI + Uvicorn | 8000 | Fraud prediction, image verification, CRUD |    │  MeshSDK    │ │  Port 8000  │  │  Port 3001          │    │ML Service│  │Go Service │  │Blockchain │   │ PostgreSQL │
 
-| Blockchain Service | TypeScript | Express + MeshSDK + Blockfrost | 3001 | Cardano transaction building & submission |
 
-| Automation | Go 1.25 | stdlib | — | Polls DB, triggers payouts via blockchain service |    └─────────────┘ └──────┬──────┘  └─────────┬───────────┘    │(Python)  │  │(Automation)│  │(Node.js)  │   │ Database   │
+| # | User | 24-Word Mnemonic |- 🤖 **AI Fraud Detection** — Gradient Boosting classifier trained on 30,000+ claims## ✨ Key Features
 
-| Smart Contract | Aiken 1.1.19 | Plutus V3 | — | On-chain Insurance Gatekeeper validator |
+|---|------|-----------------|
+
+| 1 | **Alice Johnson** | `wolf call ramp month fashion wise bike sting cry oven stairs book flee access route gown donkey crunch quantum result comfort warm return elevator` |- ⛓️ **Blockchain Payouts** — Automated on-chain ADA transactions via MeshSDK
+
+| 2 | **Bob Smith** | `gown notice anxiety dilemma casual such dismiss inner puzzle sun surround aim digital company work ridge disagree undo diesel cradle come chief damp make` |
+
+| 3 | **Carol Williams** | `humble same cricket improve donate exercise game carry genuine life game book critic stock focus field oblige volcano east neither electric pulp collect tattoo` |- 📜 **Aiken Smart Contract** — Plutus V3 Insurance Gatekeeper validator (compiled & deployed)### Key Features
+
+
+
+**How to import a test wallet:**- 🔒 **Privacy Preserved** — Blake2b-256 hashing for user identity on public ledger
+
+
+
+1. Open your wallet extension (e.g., Nami or Eternl)- 📋 **On-Chain Records** — Every payout recorded with CIP-20 metadata (label 674)- **AI Fraud Detection** — 86.3% accuracy using Gradient Boosting classifier
+
+2. Click **"Import"** or **"Restore Wallet"**
+
+3. Paste any of the 24-word mnemonics above- ⚡ **60-Second Automation** — Go service continuously polls and processes approved claims
+
+4. Set a spending password
+
+5. Switch the network to **Preprod Testnet**- 🖼️ **Image Verification** — GPT-4o Vision compares prescriptions against pharmacy receipts- **Blockchain Payouts** — Automated on-chain transactions via MeshSDK on Cardano Preprod- ✅ **AI Fraud Detection** - 86.3% accuracy using Gradient Boosting
+
+
+
+> 💡 **Don't want to import?** You can also use **your own Cardano wallet** — just connect it and the app will auto-register you. A profile setup popup will appear for you to enter your name, age, and gender.
+
+
+
+------- **Image Verification** — GPT-4o Vision compares prescriptions against pharmacy receipts- ✅ **Blockchain Payouts** - Automated on-chain transactions via MeshSDK
+
+
+
+### Step 3 — Open the App & Connect
+
+
+
+1. Go to **[http://178.128.212.100](http://178.128.212.100)**## 🏗️ Architecture- **Privacy Preserved** — Blake2b hashing for public payout records- ✅ **Privacy Preserved** - Blake2b hashing for user data
+
+2. Click **"Connect Wallet"** in the top navigation bar
+
+3. Select your wallet provider (Nami / Eternl / Lace)
+
+4. Approve the connection in your wallet popup
+
+```- **Transparent Records** — All payouts immutably recorded on-chain (metadata label 674)- ✅ **Transparent Records** - All payouts recorded on Cardano Preprod
+
+---
+
+┌────────────────────────────────────────────────────────────┐
+
+### Step 4 — Set Up Your Profile (First-Time Users)
+
+│                     Nginx (port 80)                        │- **60-Second Automation** — Go service polls and processes approved payouts continuously- ✅ **Real-time Processing** - 60-second automation polling
+
+If this is your first time connecting, a **Profile Setup modal** will appear:
+
+│   /  → Vue SPA     /api/ → Python :8000                   │
+
+- **Full Name** — e.g., "John Doe"
+
+- **Age** — e.g., 30│                     /service/ → Node.js :3001              │
+
+- **Gender** — Male or Female
+
+└──────┬──────────────────┬──────────────────┬───────────────┘
+
+Click **Save & Continue** — you're now registered!
+
+       │                  │                  │------
+
+> Returning users are automatically recognized by their wallet address.
+
+┌──────▼──────┐   ┌──────▼──────┐   ┌──────▼───────────────┐
+
+---
+
+│  Vue 3 +    │   │  FastAPI    │   │  Express + MeshSDK   │
+
+### Step 5 — Explore the Dashboard
+
+│  TailwindCSS│   │  ML Service │   │  Blockchain Service  │
+
+Once connected, your dashboard shows:
+
+│  MeshSDK    │   │  Port 8000  │   │  Port 3001           │## 🏗️ Architecture## 🏗️ Architecture
+
+| Section | What It Does |
+
+|---------|-------------|└─────────────┘   └──────┬──────┘   └──────┬───────────────┘
+
+| 🟢 **Welcome Card** | Shows your name, connected wallet, insurance expiry date, and premium amount |
+
+| 📊 **Dashboard Stats** | 4 clickable cards — **Total Claims**, **Approved**, **Rejected**, **Pending Payout** (click any to see filtered list) |                         │                 │
+
+| 📋 **Submit New Claim** | Opens the multi-step claim submission form |
+
+| 📜 **View Claims History** | Modal with all your past claims, statuses, and transaction hashes |                  ┌──────▼─────────────────▼────┐
+
+
+
+---                  │     PostgreSQL (5432)        │``````
+
+
+
+### Step 6 — Submit an Insurance Claim                  │     Database: HealthTrust    │
+
+
+
+Click **"Submit New Claim"** → the form has 3 steps:                  └──────────────┬───────────────┘┌──────────────────────────────────────────────────────────────────┐┌─────────────────────────────────────────────────────────┐
+
+
+
+#### Step 1 — Hospital Stay Details                                 │
+
+- **Admission Date** — when you were admitted
+
+- **Discharge Date** — when you were discharged                  ┌──────────────▼───────────────┐│                        Nginx (port 80)                           ││                Vue 3 Frontend (client/)                 │
+
+- Days hospitalized is auto-calculated
+
+                  │   Go Automation Service      │
+
+#### Step 2 — Treatment & Billing
+
+- **Primary Diagnosis** — choose from:                  │   Polls DB → triggers payouts││  /  → Vue SPA    /api/ → Python :8000    /service/ → Node :3001  ││          User submits claims, views results             │
+
+  - Pregnancy & Childbirth
+
+  - Hypertension                  │   every 60 seconds           │
+
+  - Diabetes Mellitus
+
+  - Pneumonia                  └──────────────────────────────┘└──────────┬───────────────┬───────────────────┬───────────────────┘└──────────┬──────────────────────────────────────────────┘
+
+  - Gastroenteritis
+
+  - Cesarean Section```
+
+  - Cataract Surgery
+
+  - Other Medical Condition           │               │                   │           │
+
+- **Total Amount Billed** — in ₳ (ADA)
+
+---
+
+#### Step 3 — Supporting Documents (Optional but Recommended)
+
+- Upload a **Hospital Receipt** (image or PDF)    ┌──────▼──────┐ ┌──────▼──────┐  ┌─────────▼──────────┐           ├─────────────┬──────────────┬─────────────────┐
+
+- Upload a **Doctor's Prescription** (image or PDF)
+
+- If both are uploaded, **GPT-4o Vision AI** compares them and produces an **image verification score** (0–100%)## 📁 Project Structure
+
+
+
+Click **Submit** → the AI model instantly returns:    │  Vue 3 +    │ │  FastAPI    │  │  Express + MeshSDK  │           ▼             ▼              ▼                 ▼
+
+- ✅ **Genuine** (with confidence %) — claim is approved
+
+- ❌ **Fraudulent** (with confidence %) — claim is rejected| Service | Language | Framework | Port | Role |
+
+
+
+---|---------|----------|-----------|------|------|    │  TailwindCSS│ │  ML Service │  │  Blockchain Service │    ┌──────────┐  ┌───────────┐  ┌───────────┐   ┌────────────┐
+
+
+
+### Step 7 — Get Your Payout (ADA to Your Wallet)| Frontend | Vue 3 | Vite + TailwindCSS + MeshSDK | — (Nginx) | User interface, wallet connection |
+
+
+
+If your claim is marked as **genuine**:| ML Service | Python 3.10 | FastAPI + Uvicorn | 8000 | Fraud prediction, image verification, CRUD |    │  MeshSDK    │ │  Port 8000  │  │  Port 3001          │    │ML Service│  │Go Service │  │Blockchain │   │ PostgreSQL │
+
+
+
+1. Open **Claims History** (or click the **"Pending Payout"** stat card)| Blockchain Service | TypeScript | Express + MeshSDK + Blockfrost | 3001 | Cardano transaction building & submission |
+
+2. Find your approved claim
+
+3. Click the **"Claim Amount"** button| Automation | Go 1.25 | stdlib | — | Polls DB, triggers payouts via blockchain service |    └─────────────┘ └──────┬──────┘  └─────────┬───────────┘    │(Python)  │  │(Automation)│  │(Node.js)  │   │ Database   │
+
+4. The Go automation service picks it up within **60 seconds**
+
+5. Real **ADA is sent from the treasury wallet to your connected wallet**| Smart Contract | Aiken 1.1.19 | Plutus V3 | — | On-chain Insurance Gatekeeper validator |
+
+6. A **transaction hash** appears — click it to verify on [CardanoScan (Preprod)](https://preprod.cardanoscan.io)
 
 | Database | — | PostgreSQL 18 | 5432 | Users, claims, transactions, payouts |                           │                   │    │Port 8000 │  │Background │  │Port 3001  │   │ Port 5432  │
 
+The on-chain transaction includes **CIP-20 metadata** (label 674) with:
 
+- Claim ID, User ID, Amount in ADA
 
-```                    ┌──────▼───────────────────▼────┐    └──────────┘  └───────────┘  └─────┬─────┘   └────────────┘
+- ML prediction status, Diagnosis
+
+- Patient name (hashed for privacy), Smart contract reference```                    ┌──────▼───────────────────▼────┐    └──────────┘  └───────────┘  └─────┬─────┘   └────────────┘
+
+- Timestamp and network
 
 healthtrust/
 
+> 💰 The treasury wallet holds **~4,000+ tADA** on Cardano Preprod for payouts.
+
 ├── client/                     # Vue 3 Frontend (SPA)                    │       PostgreSQL (5432)        │                                        │
+
+---
 
 │   ├── src/
 
+## ✨ Key Features
+
 │   │   ├── components/         # ClaimForm, ClaimsList, NavBar, etc.                    │       Database: HealthTrust    │                                        ▼
 
-│   │   ├── composables/        # useToast
+| Feature | Description |
 
-│   │   ├── api.js              # API client                    └──────────────┬────────────────┘                              ┌──────────────────┐
+|---------|-------------|│   │   ├── composables/        # useToast
 
-│   │   ├── App.vue             # Root component
+| 🤖 **AI Fraud Detection** | Gradient Boosting classifier trained on 30,000+ claims — **86.3% accuracy** |
 
-│   │   └── main.js             # Entry point                                   │                              │ Cardano Preprod  │
+| 🖼️ **Image Verification** | GPT-4o Vision compares prescription against pharmacy receipt for authenticity |│   │   ├── api.js              # API client                    └──────────────┬────────────────┘                              ┌──────────────────┐
 
-│   ├── tailwind.config.js
+| ⛓️ **Blockchain Payouts** | Automated real ADA transactions on Cardano Preprod via MeshSDK |
+
+| 📋 **On-Chain Records** | Every payout permanently recorded with CIP-20 metadata (label 674) |│   │   ├── App.vue             # Root component
+
+| 🔒 **Privacy Preserved** | Blake2b-256 hashing for user identity on public ledger |
+
+| ⚡ **60-Second Automation** | Go service polls database and processes approved payouts continuously |│   │   └── main.js             # Entry point                                   │                              │ Cardano Preprod  │
+
+| 🔓 **Open Registration** | Anyone with a Cardano wallet can join — no pre-registration needed |
+
+| 📜 **Aiken Smart Contract** | Plutus V3 Insurance Gatekeeper validator compiled & deployed on-chain |│   ├── tailwind.config.js
+
+| 📊 **Interactive Dashboard** | Clickable stat cards, claim history, real-time status tracking |
 
 │   └── vite.config.js                    ┌──────────────▼────────────────┐                              │  Testnet         │
 
+---
+
 │
+
+## 🏗️ Architecture
 
 ├── ml-service/                 # Python ML Service                    │    Go Automation Service       │                              └──────────────────┘
 
-│   ├── main.py                 # FastAPI endpoints
+```
 
-│   ├── model_loader.py         # Model loading utilities                    │    Polls DB → triggers payouts │```
+┌────────────────────────────────────────────────────────────┐│   ├── main.py                 # FastAPI endpoints
 
-│   ├── database.py             # PostgreSQL connection
+│                     Nginx (port 80)                        │
 
-│   ├── prescription_verifier.py # GPT-4o image verification                    │    every 60 seconds            │
+│   /  → Vue SPA     /api/ → Python :8000                   ││   ├── model_loader.py         # Model loading utilities                    │    Polls DB → triggers payouts │```
 
-│   ├── export_model.py         # Re-train & export model
+│                     /service/ → Node.js :3001              │
 
-│   ├── requirements.txt                    └───────────────────────────────┘---
+└──────┬──────────────────┬──────────────────┬───────────────┘│   ├── database.py             # PostgreSQL connection
 
-│   └── models/                 # Trained model artifacts (.pkl)
+       │                  │                  │
 
-│```
+┌──────▼──────┐   ┌──────▼──────┐   ┌──────▼───────────────┐│   ├── prescription_verifier.py # GPT-4o image verification                    │    every 60 seconds            │
 
-├── server/
+│  Vue 3 +    │   │  FastAPI    │   │  Express + MeshSDK   │
 
-│   └── blockchain-service/     # Node.js Blockchain Service## 📁 Project Structure
+│  TailwindCSS│   │  ML Service │   │  Blockchain Service  ││   ├── export_model.py         # Re-train & export model
 
-│       ├── src/app.ts          # Express + MeshSDK + Blockfrost
+│  MeshSDK    │   │  Port 8000  │   │  Port 3001           │
 
-│       ├── tsconfig.json| Service | Language | Framework | Port | Role |
+└─────────────┘   └──────┬──────┘   └──────┬───────────────┘│   ├── requirements.txt                    └───────────────────────────────┘---
 
-│       └── package.json
+                         │                 │
 
-│|---------|----------|-----------|------|------|```
+                  ┌──────▼─────────────────▼────┐│   └── models/                 # Trained model artifacts (.pkl)
 
-├── automation-service/         # Go Automation Service
+                  │     PostgreSQL (5432)        │
 
-│   ├── blockchain.go           # Payout logic| Frontend | Vue 3 | Vite + TailwindCSS + MeshSDK | — (Nginx) | User interface, wallet connection |model_1/
+                  │     Database: HealthTrust    ││```
+
+                  └──────────────┬───────────────┘
+
+                                 │├── server/
+
+                  ┌──────────────▼───────────────┐
+
+                  │   Go Automation Service      ││   └── blockchain-service/     # Node.js Blockchain Service## 📁 Project Structure
+
+                  │   Polls DB → triggers payouts│
+
+                  │   every 60 seconds           ││       ├── src/app.ts          # Express + MeshSDK + Blockfrost
+
+                  └──────────────────────────────┘
+
+```│       ├── tsconfig.json| Service | Language | Framework | Port | Role |
+
+
+
+| Service | Language | Framework | Port |│       └── package.json
+
+|---------|----------|-----------|------|
+
+| Frontend | Vue 3 | Vite + TailwindCSS + MeshSDK | 80 (Nginx) |│|---------|----------|-----------|------|------|```
+
+| ML Service | Python 3.12 | FastAPI + Uvicorn | 8000 |
+
+| Blockchain Service | TypeScript | Express + MeshSDK + Blockfrost | 3001 |├── automation-service/         # Go Automation Service
+
+| Automation | Go 1.22 | stdlib | Background |
+
+| Smart Contract | Aiken 1.1.19 | Plutus V3 | On-chain |│   ├── blockchain.go           # Payout logic| Frontend | Vue 3 | Vite + TailwindCSS + MeshSDK | — (Nginx) | User interface, wallet connection |model_1/
+
+| Database | SQL | PostgreSQL 16 | 5432 |
 
 │   ├── crypto.go               # Blake2b hashing
 
+---
+
 │   ├── database.go             # DB polling| ML Service | Python 3.10 | FastAPI + Uvicorn | 8000 | Fraud prediction, CRUD, image verification |├── client/                      # Vue 3 Frontend
+
+## 📁 Project Structure
 
 │   └── go.mod
 
-│| Blockchain Service | TypeScript | Express + MeshSDK + Blockfrost | 3001 | Cardano transaction building & submission |│   ├── src/
+```
 
-├── aiken-contracts/            # Aiken Smart Contract (Plutus V3)
+healthtrust/│| Blockchain Service | TypeScript | Express + MeshSDK + Blockfrost | 3001 | Cardano transaction building & submission |│   ├── src/
 
-│   ├── validators/| Automation | Go 1.25 | stdlib | — | Polls DB, triggers payouts via Blockchain Service |│   │   ├── components/         # Vue components
+├── client/                      # Vue 3 Frontend (SPA)
 
-│   │   └── insurance_gatekeeper.ak   # On-chain validator
+│   ├── src/├── aiken-contracts/            # Aiken Smart Contract (Plutus V3)
 
-│   ├── aiken.toml| Database | — | PostgreSQL 18 | 5432 | Users, claims, transactions, payouts |│   │   ├── views/              # Page views
+│   │   ├── components/          # ClaimForm, ClaimsList, NavBar, WalletSelector, etc.
 
-│   └── build/                  # Compiled plutus.json
+│   │   ├── composables/         # useToast│   ├── validators/| Automation | Go 1.25 | stdlib | — | Polls DB, triggers payouts via Blockchain Service |│   │   ├── components/         # Vue components
 
-││   │   └── App.vue             # Root component
+│   │   ├── api.js               # API client
 
-├── database/                   # Database schemas
+│   │   ├── App.vue              # Root component (dashboard, modals, profile setup)│   │   └── insurance_gatekeeper.ak   # On-chain validator
 
-│   ├── schema.sql              # Core tables---│   └── package.json
+│   │   └── main.js              # Entry point
 
-│   ├── seed.sql                # Initial data (3 users with wallets)
+│   ├── tailwind.config.js│   ├── aiken.toml| Database | — | PostgreSQL 18 | 5432 | Users, claims, transactions, payouts |│   │   ├── views/              # Page views
 
-│   └── migrations/             # Schema updates│
+│   └── vite.config.js
+
+││   └── build/                  # Compiled plutus.json
+
+├── ml-service/                  # Python ML Service
+
+│   ├── main.py                  # FastAPI app setup││   │   └── App.vue             # Root component
+
+│   ├── routes.py                # All API endpoints (predict, users, claims, images)
+
+│   ├── model_loader.py          # Model loading utilities├── database/                   # Database schemas
+
+│   ├── database.py              # PostgreSQL ORM (SQLAlchemy)
+
+│   ├── prescription_verifier.py # GPT-4o Vision image verification│   ├── schema.sql              # Core tables---│   └── package.json
+
+│   ├── export_model.py          # Re-train & export model
+
+│   ├── requirements.txt│   ├── seed.sql                # Initial data (3 users with wallets)
+
+│   └── models/                  # Trained model artifacts (.pkl)
+
+││   └── migrations/             # Schema updates│
+
+├── server/
+
+│   └── blockchain-service/      # Node.js Blockchain Service│
+
+│       ├── src/app.ts           # Express + MeshSDK + Blockfrost
+
+│       ├── tsconfig.json├── treasury-wallet/            # Cardano wallet management## 📁 Project Structure├── server/
+
+│       └── package.json
+
+││   ├── generate-wallet.js
+
+├── automation-service/          # Go Automation Service
+
+│   ├── blockchain.go            # Main loop + payout logic│   ├── generate-user-wallets.js│   ├── blockchain-service/     # Node.js + MeshSDK
+
+│   ├── crypto.go                # Blake2b-256 hashing
+
+│   ├── database.go              # DB polling every 60 seconds│   └── users/                  # User wallet files
+
+│   └── go.mod
+
+││```│   │   ├── src/app.ts         # Cardano integration
+
+├── aiken-contracts/             # Aiken Smart Contract (Plutus V3)
+
+│   ├── validators/├── data/                       # Training data & notebook
+
+│   │   └── insurance_gatekeeper.ak
+
+│   ├── aiken.toml│   ├── healthcare_claims.csvhealthtrust/│   │   └── package.json
+
+│   └── build/                   # Compiled plutus.json
+
+││   └── model_training.ipynb
+
+├── database/                    # Database schemas & migrations
+
+│   ├── schema.sql               # Core tables (users, claims, blockchain_transactions)│├── client/                     # Vue 3 Frontend (SPA)│   └── go-api/                 # Go API (future)
+
+│   ├── seed.sql                 # Initial seed data
+
+│   └── migrations/              # Schema updates (003–005)├── start.sh                    # Start/stop all services
 
 │
 
-├── treasury-wallet/            # Cardano wallet management## 📁 Project Structure├── server/
+├── treasury-wallet/             # Cardano wallet management├── .env                        # Environment variables│   ├── src/│
 
 │   ├── generate-wallet.js
 
-│   ├── generate-user-wallets.js│   ├── blockchain-service/     # Node.js + MeshSDK
+│   ├── generate-user-wallets.js└── .gitignore
 
-│   └── users/                  # User wallet files
+│   └── users/                   # Generated test wallet files (alice, bob, carol)
 
-│```│   │   ├── src/app.ts         # Cardano integration
+│```│   │   ├── components/         # Vue components (ClaimForm, ClaimsList, NavBar, etc.)├── ml-service/                 # Python ML Service
 
-├── data/                       # Training data & notebook
+├── deploy.sh                    # One-command deploy to DigitalOcean
 
-│   ├── healthcare_claims.csvhealthtrust/│   │   └── package.json
+├── start-all-services.sh        # Start all local services
 
-│   └── model_training.ipynb
+└── README.md                    # ← You are here
 
-│├── client/                     # Vue 3 Frontend (SPA)│   └── go-api/                 # Go API (future)
-
-├── start.sh                    # Start/stop all services
-
-├── .env                        # Environment variables│   ├── src/│
-
-└── .gitignore
-
-```│   │   ├── components/         # Vue components (ClaimForm, ClaimsList, NavBar, etc.)├── ml-service/                 # Python ML Service
+```---│   │   ├── composables/        # Composable hooks (useToast)│   ├── app.py                 # Flask API
 
 
 
----│   │   ├── composables/        # Composable hooks (useToast)│   ├── app.py                 # Flask API
+---
 
 
 
-## 📜 Aiken Smart Contract│   │   ├── api.js              # API client│   └── voting_classifier_model.pkl
+## 📜 Aiken Smart Contract## 📜 Aiken Smart Contract│   │   ├── api.js              # API client│   └── voting_classifier_model.pkl
 
 
 
-The **Insurance Gatekeeper** is a Plutus V3 validator compiled with Aiken v1.1.19. It enforces on-chain rules for insurance payouts.│   │   ├── App.vue             # Root component│
+The **Insurance Gatekeeper** is a Plutus V3 validator compiled with Aiken v1.1.19:
 
 
 
-### Validator Logic│   │   └── main.js             # Entry point├── database/
-
-
-
-```aiken│   ├── index.html│   └── migrations/             # SQL schemas
+```aikenThe **Insurance Gatekeeper** is a Plutus V3 validator compiled with Aiken v1.1.19. It enforces on-chain rules for insurance payouts.│   │   ├── App.vue             # Root component│
 
 validator insurance_gatekeeper {
 
-  spend(datum, _redeemer, _self) {│   ├── tailwind.config.js│
+  spend(datum, _redeemer, _self) {
 
     expect datum: InsuranceDatum
 
-    // 1. Must be signed by treasury wallet│   └── vite.config.js├── docs/                       # Documentation
+    // Must be signed by treasury wallet + have non-empty hashed user ID### Validator Logic│   │   └── main.js             # Entry point├── database/
 
-    // 2. Datum must have non-empty hashed_user_id
-
-    list.has(tx.extra_signatories, treasury_pkh)││   ├── QUICKSTART_COMPLETE.md
+    list.has(tx.extra_signatories, treasury_pkh)
 
       && !is_empty(datum.hashed_user_id)
 
-  }├── ml-service/                 # Python ML Service│   ├── RUN_COMPLETE_SYSTEM.md
+  }
 
-}
+}```aiken│   ├── index.html│   └── migrations/             # SQL schemas
 
-```│   ├── main.py                 # FastAPI endpoints│   └── FOLDER_STRUCTURE.md
+```
 
+validator insurance_gatekeeper {
 
+| Property | Value |
 
-### Contract Details│   ├── model_loader.py         # Model loading utilities│
-
-
-
-| Property | Value |│   ├── database.py             # PostgreSQL connection├── passwords.md                # Credentials (gitignored)
-
-|----------|-------|
-
-| **Language** | Plutus V3 (Conway era) |│   ├── prescription_verifier.py # GPT-4o image verification└── start-all-services.sh      # One-command startup
+|----------|-------|  spend(datum, _redeemer, _self) {│   ├── tailwind.config.js│
 
 | **Script Hash** | `5b5a1ef972750003539f76357d1c917e48b0bf5748a949a4f8adae0e` |
 
-| **Script Address** | `addr_test1wztz8zu9yyw372ren6tlyk5hgtjzm22st2c9dyz7s92cwxcz7cs3k` |│   ├── export_model.py         # Re-train & export model```
+| **Script Address** | `addr_test1wztz8zu9yyw372ren6tlyk5hgtjzm22st2c9dyz7s92cwxcz7cs3k` |    expect datum: InsuranceDatum
 
-| **Treasury PKH** | `9b9460c4940fc92d01be70d036ce43f86adcff75ec043517186c5057` |
+
+
+> **Note:** The smart contract is compiled and deployed on Cardano Preprod with 500 tADA locked. Script spending (unlocking) is currently disabled due to a known MeshSDK v1 limitation with Plutus V3 CBOR serialization. Payouts are processed via the treasury wallet directly — which requires the same private key, providing equivalent security.    // 1. Must be signed by treasury wallet│   └── vite.config.js├── docs/                       # Documentation
+
+
+
+---    // 2. Datum must have non-empty hashed_user_id
+
+
+
+## 🧠 ML Model    list.has(tx.extra_signatories, treasury_pkh)││   ├── QUICKSTART_COMPLETE.md
+
+
+
+| Property | Value |      && !is_empty(datum.hashed_user_id)
+
+|----------|-------|
+
+| Algorithm | Gradient Boosting Classifier |  }├── ml-service/                 # Python ML Service│   ├── RUN_COMPLETE_SYSTEM.md
+
+| Accuracy | **86.3%** |
+
+| Dataset | 30,000+ simulated healthcare claims |}
+
+| Features | Age, gender, diagnosis, admission/discharge dates, amount billed, num procedures, days admitted, insurance type, region |
+
+| Output | Binary — `genuine` or `fraudulent` + confidence % |```│   ├── main.py                 # FastAPI endpoints│   └── FOLDER_STRUCTURE.md
+
+
+
+The model was trained in `healthcare_fraud_final.ipynb` and exported to `ml-service/models/` as pickle files.
+
+
+
+---### Contract Details│   ├── model_loader.py         # Model loading utilities│
+
+
+
+## 🔗 API Reference
+
+
+
+### ML Service (Port 8000)| Property | Value |│   ├── database.py             # PostgreSQL connection├── passwords.md                # Credentials (gitignored)
+
+
+
+| Method | Endpoint | Description ||----------|-------|
+
+|--------|----------|-------------|
+
+| GET | `/` | Health check + model info || **Language** | Plutus V3 (Conway era) |│   ├── prescription_verifier.py # GPT-4o image verification└── start-all-services.sh      # One-command startup
+
+| POST | `/predict` | Submit claim for fraud prediction |
+
+| GET | `/users/{wallet}` | Get user by wallet (auto-registers new wallets) || **Script Hash** | `5b5a1ef972750003539f76357d1c917e48b0bf5748a949a4f8adae0e` |
+
+| PUT | `/users/{wallet}/profile` | Update user profile (name, age, gender) |
+
+| GET | `/claims/{id}/trigger-payout` | Trigger payout for approved claim || **Script Address** | `addr_test1wztz8zu9yyw372ren6tlyk5hgtjzm22st2c9dyz7s92cwxcz7cs3k` |│   ├── export_model.py         # Re-train & export model```
+
+| POST | `/verify-images` | Verify prescription vs receipt (GPT-4o Vision) |
+
+| GET | `/model/info` | ML model metadata || **Treasury PKH** | `9b9460c4940fc92d01be70d036ce43f86adcff75ec043517186c5057` |
+
+| GET | `/recent-activity` | Recent system activity feed |
 
 │   ├── setup.sh                # Python venv setup script
 
+### Blockchain Service (Port 3001)
+
 ### Current Status
 
-│   ├── requirements.txtSee detailed structure: [`docs/FOLDER_STRUCTURE.md`](docs/FOLDER_STRUCTURE.md)
+| Method | Endpoint | Description |
 
-The contract is **compiled and deployed** on Cardano Preprod. Script spending (unlocking funds from the contract) is currently disabled due to a known [MeshSDK v1 limitation](https://github.com/MeshJS/mesh/issues) with Plutus V3 CBOR serialization. Payouts use the treasury wallet directly — which still requires the same private key, providing equivalent security. Smart contract spending will be enabled when MeshSDK v2 releases with full Plutus V3 support.
+|--------|----------|-------------|│   ├── requirements.txtSee detailed structure: [`docs/FOLDER_STRUCTURE.md`](docs/FOLDER_STRUCTURE.md)
 
-│   └── models/                 # Trained model artifacts (.pkl)
+| GET | `/health` | Health check + treasury balance |
+
+| GET | `/api/balance` | Treasury wallet & smart contract balances |The contract is **compiled and deployed** on Cardano Preprod. Script spending (unlocking funds from the contract) is currently disabled due to a known [MeshSDK v1 limitation](https://github.com/MeshJS/mesh/issues) with Plutus V3 CBOR serialization. Payouts use the treasury wallet directly — which still requires the same private key, providing equivalent security. Smart contract spending will be enabled when MeshSDK v2 releases with full Plutus V3 support.
+
+| POST | `/api/payout-transaction` | Submit payout transaction to Cardano |
+
+| GET | `/api/transaction/{txHash}` | Get transaction details from Blockfrost |│   └── models/                 # Trained model artifacts (.pkl)
+
+| GET | `/api/epoch` | Current Cardano epoch/slot info |
+
+---
 
 ---
 
 │---
 
+## 🔐 Security
+
 ## 🚀 Quick Start
 
-├── server/
+- **Wallet mnemonics** stored in `.env` files (gitignored — never committed)
 
-### Prerequisites
+- **Backend services** bound to `127.0.0.1` (not publicly accessible)├── server/
 
-│   └── blockchain-service/     # Node.js Blockchain Service## 🚀 Quick Start
+- **Nginx** is the only public-facing process
 
-- **Node.js** ≥ 18 (with npm)
+- **Blake2b-256 hashing** for privacy-preserving public payout records### Prerequisites
 
-- **Python** ≥ 3.10│       ├── src/app.ts          # Express + MeshSDK + Blockfrost
+- **UFW firewall** allows only SSH (22), HTTP (80), HTTPS (443) in production
 
-- **Go** ≥ 1.21
-
-- **PostgreSQL** ≥ 14│       ├── tsconfig.json### Prerequisites
-
-- **Aiken** ≥ 1.1.0 (optional, for contract compilation)
-
-- **Nginx** (for production reverse proxy)│       └── package.json
+- **Treasury wallet** is the only account authorized to sign payout transactions│   └── blockchain-service/     # Node.js Blockchain Service## 🚀 Quick Start
 
 
+
+---- **Node.js** ≥ 18 (with npm)
+
+
+
+## 🌐 Deployment- **Python** ≥ 3.10│       ├── src/app.ts          # Express + MeshSDK + Blockfrost
+
+
+
+The app is deployed on **DigitalOcean** at [http://178.128.212.100](http://178.128.212.100).- **Go** ≥ 1.21
+
+
+
+| Component | Details |- **PostgreSQL** ≥ 14│       ├── tsconfig.json### Prerequisites
+
+|-----------|---------|
+
+| Server | DigitalOcean Droplet — Ubuntu 22.04, 2GB RAM, 1 vCPU |- **Aiken** ≥ 1.1.0 (optional, for contract compilation)
+
+| Reverse Proxy | Nginx on port 80 |
+
+| Services | 3 systemd services (ML, Blockchain, Automation) — auto-start on boot |- **Nginx** (for production reverse proxy)│       └── package.json
+
+| Firewall | UFW — ports 22, 80, 443 only |
+
+| Database | PostgreSQL 16 on localhost:5432 |
+
+| Network | Cardano Preprod Testnet |
 
 ### 1. Clone the Repository│- Node.js 18+
 
-
-
-```bash├── automation-service/         # Go Automation Service- Python 3.8+
-
-git clone https://github.com/Yadurshan-R/HealthTrust.git
-
-cd HealthTrust│   ├── blockchain.go           # Main loop + payout logic- Go 1.20+
-
-```
-
-│   ├── crypto.go               # Blake2b hashing- PostgreSQL 14+
-
-### 2. Set Up Environment Variables
-
-│   ├── database.go             # DB polling
-
-Create a `.env` file in the project root:
-
-│   └── go.mod### 1. Clone & Setup
-
-```env
-
-# Database│
-
-DATABASE_URL=postgresql://user:password@localhost:5432/HealthTrust
-
-├── database/                   # Database schemas```bash
-
-# Blockfrost API (get from https://blockfrost.io)
-
-BLOCKFROST_API_KEY=preprodXXXXXXXXXXXXXXXXXXXXXXX│   ├── schema.sql              # Core table definitionscd /home/yadu/Development/My_FYP/model_1
-
-
-
-# Cardano│   ├── seed.sql                # Initial data (users)
-
-CARDANO_NETWORK=preprod
-
-TREASURY_ADDRESS=addr_test1q...│   └── migrations/             # Schema migrations# Apply database migrations
-
-TREASURY_MNEMONIC=word1 word2 word3 ... word24
-
-│       ├── 003_blockchain_transactions.sqlsudo -u postgres psql HealthTrust < database/migrations/004_add_payout_date.sql
-
-# OpenAI (for image verification)
-
-OPENAI_API_KEY=sk-...│       ├── 004_add_payout_date.sql```
-
-```
-
-│       └── 005_add_image_verification.sql
-
-### 3. Set Up the Database
-
-│### 2. Install Dependencies
+**Deploy new changes:**
 
 ```bash
 
-# Create the database├── aiken-contracts/            # Cardano smart contracts (Aiken)
+bash deploy.sh   # Builds frontend, syncs to server, restarts all services
 
-psql -U postgres -c "CREATE DATABASE \"HealthTrust\";"
+``````bash├── automation-service/         # Go Automation Service- Python 3.8+
 
-│   ├── validators/```bash
 
-# Run schema and seed data
 
-psql -U postgres -d HealthTrust -f database/schema.sql│   │   └── insurance_gatekeeper.ak# Frontend
+---git clone https://github.com/Yadurshan-R/HealthTrust.git
 
-psql -U postgres -d HealthTrust -f database/seed.sql
 
-psql -U postgres -d HealthTrust -f database/migrations/003_blockchain_transactions.sql│   └── aiken.tomlcd client && npm install
+
+## 🛠️ Local Development Setupcd HealthTrust│   ├── blockchain.go           # Main loop + payout logic- Go 1.20+
+
+
+
+### Prerequisites```
+
+
+
+- Node.js ≥ 18 (with npm)│   ├── crypto.go               # Blake2b hashing- PostgreSQL 14+
+
+- Python ≥ 3.10
+
+- Go ≥ 1.21### 2. Set Up Environment Variables
+
+- PostgreSQL ≥ 14
+
+- Nginx│   ├── database.go             # DB polling
+
+
+
+### Quick StartCreate a `.env` file in the project root:
+
+
+
+```bash│   └── go.mod### 1. Clone & Setup
+
+# 1. Clone the repo
+
+git clone https://github.com/Yadurshan-R/HealthTrust.git```env
+
+cd HealthTrust
+
+# Database│
+
+# 2. Set up the database
+
+sudo -u postgres psql -c "CREATE DATABASE \"HealthTrust\";"DATABASE_URL=postgresql://user:password@localhost:5432/HealthTrust
+
+sudo -u postgres psql -d HealthTrust -f database/schema.sql
+
+sudo -u postgres psql -d HealthTrust -f database/seed.sql├── database/                   # Database schemas```bash
+
+sudo -u postgres psql -d HealthTrust -f database/migrations/003_blockchain_transactions.sql
+
+sudo -u postgres psql -d HealthTrust -f database/migrations/004_add_payout_date.sql# Blockfrost API (get from https://blockfrost.io)
+
+sudo -u postgres psql -d HealthTrust -f database/migrations/005_add_image_verification.sql
+
+BLOCKFROST_API_KEY=preprodXXXXXXXXXXXXXXXXXXXXXXX│   ├── schema.sql              # Core table definitionscd /home/yadu/Development/My_FYP/model_1
+
+# 3. Create .env files (see passwords.md for credentials)
+
+
+
+# 4. Start all services
+
+bash start-all-services.sh# Cardano│   ├── seed.sql                # Initial data (users)
+
+
+
+# 5. Open http://localhost in your browserCARDANO_NETWORK=preprod
+
+```
+
+TREASURY_ADDRESS=addr_test1q...│   └── migrations/             # Schema migrations# Apply database migrations
+
+---
+
+TREASURY_MNEMONIC=word1 word2 word3 ... word24
+
+## 🔧 Tech Stack
+
+│       ├── 003_blockchain_transactions.sqlsudo -u postgres psql HealthTrust < database/migrations/004_add_payout_date.sql
+
+| Layer | Technology |
+
+|-------|-----------|# OpenAI (for image verification)
+
+| Frontend | Vue 3, Vite, TailwindCSS, MeshSDK |
+
+| ML Service | Python 3.12, FastAPI, Uvicorn, scikit-learn 1.4.0 |OPENAI_API_KEY=sk-...│       ├── 004_add_payout_date.sql```
+
+| Blockchain | Node.js 22, Express, MeshSDK, Blockfrost |
+
+| Automation | Go 1.22 |```
+
+| Smart Contracts | Aiken 1.1.19, Plutus V3 |
+
+| Database | PostgreSQL 16 |│       └── 005_add_image_verification.sql
+
+| Reverse Proxy | Nginx 1.24 |
+
+| Deployment | DigitalOcean, systemd, UFW |### 3. Set Up the Database
+
+| Network | Cardano Preprod Testnet |
+
+| Image AI | OpenAI GPT-4o Vision |│### 2. Install Dependencies
+
+
+
+---```bash
+
+
+
+## 📄 License# Create the database├── aiken-contracts/            # Cardano smart contracts (Aiken)
+
+
+
+MIT License — see [LICENSE](LICENSE) for details.psql -U postgres -c "CREATE DATABASE \"HealthTrust\";"
+
+
+
+---│   ├── validators/```bash
+
+
+
+## 🔗 Resources# Run schema and seed data
+
+
+
+- [Cardano Documentation](https://docs.cardano.org)psql -U postgres -d HealthTrust -f database/schema.sql│   │   └── insurance_gatekeeper.ak# Frontend
+
+- [MeshSDK](https://meshjs.dev)
+
+- [Blockfrost API](https://blockfrost.io)psql -U postgres -d HealthTrust -f database/seed.sql
+
+- [Cardano Testnet Faucet](https://docs.cardano.org/cardano-testnets/tools/faucet/)
+
+- [Aiken Smart Contracts](https://aiken-lang.org)psql -U postgres -d HealthTrust -f database/migrations/003_blockchain_transactions.sql│   └── aiken.tomlcd client && npm install
+
+- [CardanoScan (Preprod)](https://preprod.cardanoscan.io)
 
 psql -U postgres -d HealthTrust -f database/migrations/004_add_payout_date.sql
 
+---
+
 psql -U postgres -d HealthTrust -f database/migrations/005_add_image_verification.sql│
+
+> Built by [Yadurshan R](https://github.com/Yadurshan-R) — Final Year Project 2026
 
 ```
 

@@ -53,3 +53,6 @@ client/.vite/
 # Misc
 *.bak
 *.tmp
+
+# Exclude SUMMARY.md
+SUMMARY.md
