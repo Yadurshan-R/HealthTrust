@@ -50,8 +50,9 @@
       <div
         v-for="(tx, index) in transactions"
         :key="tx.id || index"
-        class="flex items-start space-x-3 p-3 sm:p-4 rounded-xl border border-gray-100 transition-all hover:border-gray-200 hover:bg-gray-50/50 cursor-pointer"
-        @click="viewTransaction(tx)"
+        class="flex items-start space-x-3 p-3 sm:p-4 rounded-xl border border-gray-100 transition-all"
+        :class="tx.status === 'approved' && tx.tx_hash ? 'hover:border-gray-200 hover:bg-gray-50/50 cursor-pointer' : ''"
+        @click="tx.status === 'approved' && tx.tx_hash ? viewTransaction(tx) : null"
       >
         <!-- Icon -->
         <div class="flex-shrink-0">

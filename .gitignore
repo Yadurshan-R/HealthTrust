@@ -77,3 +77,11 @@ logs/
 *.bak
 *.tmp
 Wallet_pictures/
+
+# ---- Private documentation (keep local, not public) ----
+SUMMARY.md
+passwords.md
+DATABASE_REFERENCE.md
+RUN_COMPLETE_SYSTEM.md
+STARTUP_GUIDE.md
+TESTING_GUIDE.md
