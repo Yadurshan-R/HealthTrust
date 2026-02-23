@@ -100,19 +100,27 @@
         <!-- Card Footer / Action -->
         <div class="px-4 sm:px-5 pb-4 sm:pb-5">
           <!-- Rejected Claims - ML flagged as fake -->
-          <div v-if="claim.ml_status === 'fake'" class="flex items-center justify-center space-x-1.5 py-2.5 text-danger-red bg-red-50 rounded-lg text-xs">
+          <div v-if="claim.ml_status === 'fake' && !isImageFailed(claim)" class="flex items-center justify-center space-x-1.5 py-2.5 text-danger-red bg-red-50 rounded-lg text-xs">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
             </svg>
             <span class="font-semibold">Rejected - AI Fraud Detection</span>
           </div>
 
-          <!-- Image Verification Failed -->
+          <!-- Both ML and Image failed -->
+          <div v-else-if="claim.ml_status === 'fake' && isImageFailed(claim)" class="flex items-center justify-center space-x-1.5 py-2.5 text-danger-red bg-red-50 rounded-lg text-xs">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+            <span class="font-semibold">Rejected - AI & Document Verification</span>
+          </div>
+
+          <!-- Image Verification Failed (but ML was genuine) -->
           <div v-else-if="isImageFailed(claim)" class="flex items-center justify-center space-x-1.5 py-2.5 text-danger-red bg-red-50 rounded-lg text-xs">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
             </svg>
-            <span class="font-semibold">Rejected - Document Failed</span>
+            <span class="font-semibold">Rejected - Document Verification Failed</span>
           </div>
 
           <!-- Claim Button -->
@@ -226,11 +234,14 @@ const sortedClaims = computed(() => {
 
   // Apply filter based on filterType prop
   if (props.filterType === 'approved') {
-    filtered = filtered.filter(c => c.ml_status === 'genuine');
+    // Approved = ML genuine AND images not fake
+    filtered = filtered.filter(c => c.ml_status === 'genuine' && c.images !== 'fake');
   } else if (props.filterType === 'rejected') {
-    filtered = filtered.filter(c => c.ml_status === 'fake');
+    // Rejected = ML fake OR image verification failed
+    filtered = filtered.filter(c => c.ml_status === 'fake' || c.images === 'fake');
   } else if (props.filterType === 'pending') {
-    filtered = filtered.filter(c => c.ml_status === 'genuine' && c.payout_status === 'pending');
+    // Pending payout = fully approved but not yet paid
+    filtered = filtered.filter(c => c.ml_status === 'genuine' && c.images !== 'fake' && c.payout_status === 'pending');
   }
   // 'total' or null = show all
 
@@ -238,7 +249,7 @@ const sortedClaims = computed(() => {
 });
 
 const hasFakeClaims = computed(() => {
-  return props.claims.some(claim => claim.ml_status === 'fake');
+  return props.claims.some(claim => claim.ml_status === 'fake' || claim.images === 'fake');
 });
 
 const formatDate = (dateString) => {
@@ -281,16 +292,14 @@ const getImageVerificationLabel = (claim) => {
 // Helper to determine if claim is fully approved for payout
 const isClaimApproved = (claim) => {
   // ALL conditions must be met for a claim to be claimable:
-  // 1. ML must say "genuine"
-  // 2. Images can be: not uploaded yet (null) OR verified as genuine
-  //    - If no images: button shows (user can claim based on ML alone)
-  //    - If images uploaded: must be genuine AND combined score >= 80%
-  //    - If combined < 80%: backend sets ml_status = 'fake', button disappears
-  // 3. Not already paid or processing
-  return claim.can_claim &&                            // Backend allows claiming
-         claim.ml_status === 'genuine' &&              // ML model says genuine
-         (claim.images === 'genuine' || claim.images === null) &&  // No images yet OR images verified
-         claim.payout_status === 'pending';            // Not already paid or processing
+  // 1. Backend says can_claim (ML genuine + payout pending + images not fake)
+  // 2. ML must say "genuine"
+  // 3. Images: either not uploaded (null) OR verified as genuine
+  // 4. Not already paid or processing
+  return claim.can_claim &&
+         claim.ml_status === 'genuine' &&
+         !isImageFailed(claim) &&
+         claim.payout_status === 'pending';
 };
 </script>
 

@@ -260,7 +260,11 @@ async def get_user_by_wallet(
             'block_height': claim.block_height,
             'slot': claim.slot,
             'created_at': claim.created_at.isoformat(),
-            'can_claim': claim.ml_status == 'genuine' and claim.payout_status == 'pending'
+            'can_claim': (
+                claim.ml_status == 'genuine' and
+                claim.payout_status == 'pending' and
+                claim.images != 'fake'  # Block payout if image verification failed
+            )
         })
 
     return UserClaimsResponse(
@@ -292,6 +296,9 @@ async def trigger_payout(
 
     if claim.ml_status != 'genuine':
         raise HTTPException(status_code=400, detail="Cannot trigger payout for non-genuine claim")
+
+    if claim.images == 'fake':
+        raise HTTPException(status_code=400, detail="Cannot trigger payout — image verification failed")
 
     if claim.payout_status != 'pending':
         raise HTTPException(status_code=400, detail=f"Claim already {claim.payout_status}")
@@ -368,21 +375,29 @@ async def get_recent_activity(
 ):
     """
     Get recent processed claims for public display (before wallet connection).
-    Returns claims that have been completed (have a tx_hash) — no private user data exposed.
+    Returns all recent claims — both approved (with tx_hash) and rejected.
+    No private user data is exposed.
     """
     recent_claims = (
         db.query(Claim)
-        .filter(Claim.tx_hash.isnot(None))
-        .order_by(desc(Claim.updated_at))
+        .order_by(desc(Claim.created_at))
         .limit(limit)
         .all()
     )
 
     activities = []
     for claim in recent_claims:
+        # Determine overall status: rejected if ML says fake OR image verification failed
+        if claim.ml_status == "fake":
+            status = "rejected"
+        elif claim.images == "fake":
+            status = "rejected"
+        else:
+            status = "approved"
+
         activities.append({
             "claim_id": claim.id,
-            "status": "approved" if claim.ml_status == "genuine" else "rejected",
+            "status": status,
             "amount": float(claim.amount_billed),
             "diagnosis": claim.diagnosis,
             "tx_hash": claim.tx_hash,
@@ -445,12 +460,10 @@ async def verify_images(
         final_status = "genuine" if combined_score >= 80 else "fake"
 
         # Update claim with image verification results
+        # IMPORTANT: Only update image fields — never overwrite ml_status!
+        # ML result and image result are independent verifications.
         claim.images = image_status
         claim.image_score = image_score
-
-        # CRITICAL: Update ml_status if combined score fails threshold
-        if combined_score < 80:
-            claim.ml_status = "fake"
 
         db.commit()
         db.refresh(claim)

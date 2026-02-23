@@ -307,10 +307,12 @@ const claimStats = computed(() => {
 
   const stats = {
     total: userData.value.claims.length,
-    genuine: userData.value.claims.filter(c => c.ml_status === 'genuine').length,
-    fake: userData.value.claims.filter(c => c.ml_status === 'fake').length,
-    // Pending Payout = approved but not yet paid
-    pending: userData.value.claims.filter(c => c.ml_status === 'genuine' && c.payout_status === 'pending').length,
+    // Genuine = ML says genuine AND images are NOT fake
+    genuine: userData.value.claims.filter(c => c.ml_status === 'genuine' && c.images !== 'fake').length,
+    // Rejected = ML says fake OR image verification failed
+    fake: userData.value.claims.filter(c => c.ml_status === 'fake' || c.images === 'fake').length,
+    // Pending Payout = fully approved but not yet paid (ML genuine + images not fake)
+    pending: userData.value.claims.filter(c => c.ml_status === 'genuine' && c.images !== 'fake' && c.payout_status === 'pending').length,
   };
 
   return stats;
