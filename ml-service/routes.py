@@ -147,7 +147,7 @@ async def predict_claim(
             diagnosis=claim.diagnosis,
             ml_status=prediction_result['prediction_label'],
             confidence=prediction_result['confidence'],
-            payout_status='pending'
+            payout_status='rejected' if prediction_result['prediction_label'] == 'fake' else 'pending'
         )
 
         db.add(new_claim)
@@ -464,6 +464,10 @@ async def verify_images(
         # ML result and image result are independent verifications.
         claim.images = image_status
         claim.image_score = image_score
+
+        # If image verification failed, reject the payout
+        if image_status == "fake":
+            claim.payout_status = "rejected"
 
         db.commit()
         db.refresh(claim)

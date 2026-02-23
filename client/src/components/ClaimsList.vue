@@ -90,7 +90,8 @@
             <!-- Payout Status -->
             <span class="badge text-[10px] px-2 py-0.5" :class="{
               'badge-warning': claim.payout_status === 'pending' || claim.payout_status === 'trigger',
-              'badge-success': claim.payout_status === 'completed'
+              'badge-success': claim.payout_status === 'completed',
+              'badge-danger': claim.payout_status === 'rejected'
             }">
               {{ getPayoutStatusLabel(claim.payout_status) }}
             </span>
@@ -262,6 +263,7 @@ const getPayoutStatusLabel = (status) => {
     'pending': '⏳ Pending',
     'trigger': '🚀 Triggering',
     'completed': '✅ Completed',
+    'rejected': '❌ Rejected',
   };
   return labels[status] || status;
 };

@@ -32,7 +32,7 @@ CREATE TABLE claims (
     confidence DECIMAL(5, 4),
     images VARCHAR(20),
     image_score DECIMAL(5, 2),
-    payout_status VARCHAR(20) DEFAULT 'pending' CHECK (payout_status IN ('pending', 'trigger', 'completed')),
+    payout_status VARCHAR(20) DEFAULT 'pending' CHECK (payout_status IN ('pending', 'trigger', 'completed', 'rejected')),
     payout_address VARCHAR(255),
     tx_hash VARCHAR(255),
     block_height INTEGER,
