@@ -1,19 +1,25 @@
-# Sensitive files
+# ============================================
+# HealthTrust — .gitignore
+# ============================================
+
+# ---- Sensitive / Secret files ----
 *.mnemonic
 *.key
 .env
 .env.local
 .env.*.local
+treasury-wallet/treasury.addr
 
-# Node.js
+# ---- Node.js ----
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 dist/
-build/
+package-lock.json
+client/.vite/
 
-# Python
+# ---- Python ----
 __pycache__/
 *.py[cod]
 *$py.class
@@ -22,37 +28,52 @@ env/
 *.egg-info/
 .pytest_cache/
 
-# Go
+# ---- Go ----
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+automation-service/go.sum
 
-# IDE
+# ---- ML Model artifacts (regenerate with export_model.py) ----
+ml-service/models/*.pkl
+
+# ---- Aiken build artifacts ----
+aiken-contracts/build/
+aiken-contracts/aiken.lock
+aiken-contracts/.github/
+aiken-contracts/plutus.json
+
+# ---- Jupyter notebooks (use export_model.py instead) ----
+*.ipynb
+
+# ---- Default Vite boilerplate ----
+client/public/vite.svg
+client/src/assets/vue.svg
+client/src/components/HelloWorld.vue
+
+# ---- IDE ----
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
+# ---- OS ----
 .DS_Store
 Thumbs.db
 
-# Database
+# ---- Database ----
 *.db
 *.sqlite
 *.sqlite3
 
-# Logs
+# ---- Logs ----
 *.log
 logs/
-client/.vite/
 
-# Misc
+# ---- Misc ----
 *.bak
 *.tmp
-
-# Exclude SUMMARY.md
-SUMMARY.md
+Wallet_pictures/
