@@ -12,6 +12,8 @@ CREATE TABLE users (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     wallet_address VARCHAR(255) UNIQUE NOT NULL,
+    age INTEGER DEFAULT 30,
+    gender VARCHAR(10) DEFAULT 'Male',
     expiry_date DATE NOT NULL,
     premium DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -27,8 +29,14 @@ CREATE TABLE claims (
     gender VARCHAR(10) NOT NULL CHECK (gender IN ('Male', 'Female')),
     diagnosis VARCHAR(100) NOT NULL,
     ml_status VARCHAR(20) CHECK (ml_status IN ('genuine', 'fake', 'pending')),
+    confidence DECIMAL(5, 4),
+    images VARCHAR(20),
+    image_score DECIMAL(5, 2),
     payout_status VARCHAR(20) DEFAULT 'pending' CHECK (payout_status IN ('pending', 'trigger', 'completed')),
+    payout_address VARCHAR(255),
     tx_hash VARCHAR(255),
+    block_height INTEGER,
+    slot INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
