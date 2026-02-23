@@ -1,7 +1,7 @@
 <template>
   <div
     class="bg-white rounded-2xl shadow-sm hover:shadow-md p-4 sm:p-5 border border-gray-100 transition-all duration-300 group"
-    :class="[clickable ? 'cursor-pointer' : '']"
+    :class="[clickable ? 'cursor-pointer hover:ring-2 hover:ring-main-blue/30 hover:scale-[1.02]' : '']"
     @click="handleClick"
   >
     <div class="flex items-start justify-between">

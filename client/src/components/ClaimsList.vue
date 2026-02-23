@@ -39,8 +39,8 @@
       <p class="text-xs text-dark-gray">Submit your first insurance claim to get started</p>
     </div>
 
-    <!-- Claims Grid -->
-    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <!-- Claims List -->
+    <div v-else class="grid grid-cols-1 gap-4">
       <div
         v-for="claim in sortedClaims"
         :key="claim.id"
@@ -183,6 +183,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  filterType: {
+    type: String,
+    default: null, // null = show all, 'total', 'approved', 'rejected', 'pending'
+  },
 });
 
 defineEmits(['trigger-payout', 'refresh']);
@@ -218,7 +222,19 @@ const showTransaction = (claim) => {
 };
 
 const sortedClaims = computed(() => {
-  return [...props.claims].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  let filtered = [...props.claims];
+
+  // Apply filter based on filterType prop
+  if (props.filterType === 'approved') {
+    filtered = filtered.filter(c => c.ml_status === 'genuine');
+  } else if (props.filterType === 'rejected') {
+    filtered = filtered.filter(c => c.ml_status === 'fake');
+  } else if (props.filterType === 'pending') {
+    filtered = filtered.filter(c => c.ml_status === 'genuine' && c.payout_status === 'pending');
+  }
+  // 'total' or null = show all
+
+  return filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 });
 
 const hasFakeClaims = computed(() => {

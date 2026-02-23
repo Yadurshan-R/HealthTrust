@@ -112,6 +112,8 @@
                 icon="document"
                 variant="info"
                 tooltip="All submitted claims"
+                :clickable="true"
+                @click="openFilteredClaims('total', 'Total Claims')"
               />
               <StatusCard
                 title="Approved"
@@ -119,6 +121,8 @@
                 icon="check"
                 variant="success"
                 tooltip="Claims verified as genuine"
+                :clickable="true"
+                @click="openFilteredClaims('approved', 'Approved Claims')"
               />
               <StatusCard
                 title="Rejected"
@@ -126,6 +130,8 @@
                 icon="error"
                 variant="danger"
                 tooltip="Claims flagged as fraudulent"
+                :clickable="true"
+                @click="openFilteredClaims('rejected', 'Rejected Claims')"
               />
               <StatusCard
                 title="Pending Payout"
@@ -133,6 +139,8 @@
                 icon="clock"
                 variant="warning"
                 tooltip="Approved claims awaiting payout"
+                :clickable="true"
+                @click="openFilteredClaims('pending', 'Pending Payout Claims')"
               />
             </div>
           </div>
@@ -193,6 +201,61 @@
               />
             </template>
           </BaseModal>
+
+          <!-- Filtered Claims Modal (from dashboard stat cards) -->
+          <BaseModal v-model="showFilteredModal" :title="filteredModalTitle">
+            <template #body>
+              <ClaimsList
+                :claims="userData?.claims || []"
+                :filter-type="activeFilter"
+                @trigger-payout="triggerPayout"
+                @refresh="refreshUserData"
+              />
+            </template>
+          </BaseModal>
+
+          <!-- Profile Setup Modal (for new users) -->
+          <BaseModal v-model="showProfileSetup" title="Set Up Your Profile">
+            <template #body>
+              <div class="space-y-5">
+                <p class="text-sm text-gray-600">Welcome to HealthTrust! Please fill in your details to get started.</p>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Full Name</label>
+                  <input v-model="profileForm.name" type="text" placeholder="e.g. John Doe"
+                    class="input-base w-full" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Age</label>
+                  <input v-model="profileForm.age" type="number" min="1" max="120" placeholder="e.g. 30"
+                    class="input-base w-full" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Gender</label>
+                  <div class="flex gap-3">
+                    <button @click="profileForm.gender = 'Male'"
+                      :class="profileForm.gender === 'Male' ? 'bg-main-blue text-white ring-2 ring-main-blue/30' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                      class="flex-1 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200">
+                      Male
+                    </button>
+                    <button @click="profileForm.gender = 'Female'"
+                      :class="profileForm.gender === 'Female' ? 'bg-main-green text-white ring-2 ring-main-green/30' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                      class="flex-1 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200">
+                      Female
+                    </button>
+                  </div>
+                </div>
+
+                <button @click="saveProfile"
+                  :disabled="!profileForm.name || !profileForm.age || !profileForm.gender"
+                  class="w-full btn-primary py-3 text-base font-bold disabled:opacity-40 disabled:cursor-not-allowed">
+                  Save & Continue
+                </button>
+              </div>
+            </template>
+          </BaseModal>
         </div>
       </transition>
 
@@ -220,7 +283,7 @@ import BaseModal from './components/BaseModal.vue';
 import { api } from './api.js';
 import { useToast } from './composables/useToast';
 
-const { showSuccess, showError } = useToast();
+const { showSuccess, showError, showInfo } = useToast();
 
 const isConnected = ref(false);
 const connectedAddress = ref('');
@@ -229,6 +292,11 @@ const connectedWallet = ref(null);
 const userData = ref(null);
 const showClaimForm = ref(false);
 const showHistoryModal = ref(false);
+const showFilteredModal = ref(false);
+const showProfileSetup = ref(false);
+const profileForm = ref({ name: '', age: '', gender: '' });
+const activeFilter = ref(null);
+const filteredModalTitle = ref('Claims');
 const claimsSection = ref(null);
 const claimFormSection = ref(null);
 
@@ -317,21 +385,17 @@ const onWalletDisconnected = () => {
 
 const refreshUserData = async () => {
   try {
-    // Try to fetch user by connected address
     userData.value = await api.getUserByWallet(connectedAddress.value);
-    // Show personalized welcome message
-    showSuccess(`Welcome back, ${userData.value.name}! 👋`);
-  } catch (err) {
-    // Fallback to Alice's address for demo
-    const fallbackAddress = 'addr_test1qpfr77c777y9a0x3hj4fqev30ak5j7csw4r9rvfsd768tsqpdtwek63hnds2hwqevj2jhh88qmrzyw3anz44ecx0k3dq8wkuny';
-    try {
-      userData.value = await api.getUserByWallet(fallbackAddress);
-      connectedAddress.value = fallbackAddress;
-      // Show personalized recognition without mentioning "demo"
-      showSuccess(`Welcome, ${userData.value.name}! 👋`);
-    } catch (fallbackErr) {
-      throw new Error('Wallet address not registered.');
+
+    // Check if this is a new auto-registered user (name starts with "User_")
+    if (userData.value.name.startsWith('User_')) {
+      showProfileSetup.value = true;
+      showInfo('Welcome! Please set up your profile to get started.');
+    } else {
+      showSuccess(`Welcome back, ${userData.value.name}! 👋`);
     }
+  } catch (err) {
+    throw new Error('Failed to connect wallet. Please try again.');
   }
 };
 
@@ -351,10 +415,37 @@ const triggerPayout = async (claimId) => {
   }
 };
 
+const saveProfile = async () => {
+  try {
+    if (!profileForm.value.name || !profileForm.value.age || !profileForm.value.gender) {
+      showError('Please fill in all fields');
+      return;
+    }
+    await api.updateProfile(connectedAddress.value, {
+      name: profileForm.value.name,
+      age: parseInt(profileForm.value.age),
+      gender: profileForm.value.gender
+    });
+    showProfileSetup.value = false;
+    // Refresh to get updated data
+    userData.value = await api.getUserByWallet(connectedAddress.value);
+    showSuccess(`Welcome, ${userData.value.name}! Your profile is set up. 🎉`);
+  } catch (err) {
+    showError(`Failed to save profile: ${err.response?.data?.detail || err.message}`);
+  }
+};
+
 const scrollToClaims = () => {
   if (claimsSection.value) {
     claimsSection.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+};
+
+// Open filtered claims modal when clicking a dashboard stat card
+const openFilteredClaims = (filterType, title) => {
+  activeFilter.value = filterType;
+  filteredModalTitle.value = title;
+  showFilteredModal.value = true;
 };
 
 // Toggle claim form and scroll to it

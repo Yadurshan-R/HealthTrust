@@ -76,6 +76,14 @@ export const api = {
         const response = await apiClient.get('/model/info');
         return response.data;
     },
+
+    /**
+     * Update user profile (name, age, gender)
+     */
+    async updateProfile(walletAddress, profileData) {
+        const response = await apiClient.put(`/users/${walletAddress}/profile`, profileData);
+        return response.data;
+    },
 };
 
 // Error handling interceptor

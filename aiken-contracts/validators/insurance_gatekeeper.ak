@@ -38,10 +38,9 @@ validator insurance_gatekeeper {
     // Requirement 2: Datum must be present (privacy check)
     let has_valid_datum =
       when datum is {
-        Some(d) -> {
+        Some(d) ->
           // Verify that hashed_user_id is not empty
           d.hashed_user_id != ""
-        }
         None -> False
       }
 

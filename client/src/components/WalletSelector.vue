@@ -274,25 +274,39 @@ const connectWallet = async (walletKey) => {
       throw new Error('No addresses found in wallet. Please ensure your wallet has transactions.');
     }
     
-    console.log('🔍 Raw address from wallet:', usedAddressesHex[0]);
+    const rawHex = usedAddressesHex[0];
+    console.log('🔍 Raw address from wallet:', rawHex);
     
-    // Convert hex address to bech32 format using browser's Buffer
-    // The hex address starts with the address bytes, we need to convert to bech32
+    // Convert hex address to bech32 format
+    // CIP-30 wallets return addresses as hex-encoded bytes
     let address;
     
-    // Import bech32 encoder (built into most Cardano libs)
-    try {
-      // Use the Address class from @meshsdk/core if available
-      const { Address } = await import('@meshsdk/core');
-      // The wallet returns addresses in hex, convert to bech32
-      address = Address.fromHex(usedAddressesHex[0]).toBech32();
-      console.log('✅ Converted to bech32:', address);
-    } catch (conversionError) {
-      console.error('❌ Address conversion failed:', conversionError);
-      // Fallback: If conversion fails, try using the hex directly
-      // The backend might need to be updated to accept both formats
-      address = usedAddressesHex[0];
-      console.warn('⚠️ Using hex address as fallback');
+    // Check if it's already bech32 (starts with addr)
+    if (rawHex.startsWith('addr')) {
+      address = rawHex;
+      console.log('✅ Address already in bech32 format:', address);
+    } else {
+      try {
+        // Convert hex string to Uint8Array (browser-safe, no Buffer needed)
+        const hexBytes = new Uint8Array(
+          rawHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16))
+        );
+
+        // Determine prefix from the header byte
+        // Bits 0-3 of first byte: 0 = testnet, 1 = mainnet
+        const prefix = (hexBytes[0] & 0x0F) === 0 ? 'addr_test' : 'addr';
+
+        // Use the bech32 library (transitive dep of MeshSDK)
+        const { bech32 } = await import('bech32');
+        const words = bech32.toWords(hexBytes);
+        address = bech32.encode(prefix, words, 200);
+
+        console.log('✅ Converted hex → bech32:', address);
+      } catch (conversionError) {
+        console.error('❌ Bech32 conversion failed:', conversionError);
+        // Absolute last resort — should not happen
+        address = rawHex;
+      }
     }
 
     // Store connection info
