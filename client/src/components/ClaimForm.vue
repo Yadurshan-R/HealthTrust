@@ -188,7 +188,7 @@
               </svg>
             </div>
             <h4 class="text-base sm:text-lg font-bold text-gray-900">Supporting Documents</h4>
-            <span class="text-[10px] px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full font-semibold">Optional</span>
+            <span class="text-[10px] px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-semibold">Required</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -290,6 +290,19 @@
             </div>
           </div>
 
+          <!-- Missing documents warning -->
+          <transition name="fade">
+            <div v-if="!receiptFile || !prescriptionFile" class="flex items-start space-x-3 p-3.5 bg-amber-50 rounded-xl border border-amber-200">
+              <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <div>
+                <p class="text-sm font-semibold text-amber-800">Documents Required</p>
+                <p class="text-xs text-amber-700 mt-0.5">Please upload both the <strong>Hospital Receipt</strong> and <strong>Doctor's Prescription</strong> to submit your claim.</p>
+              </div>
+            </div>
+          </transition>
+
           <!-- Submit / Cancel buttons -->
           <div class="flex gap-3 pt-2">
             <button type="button" @click="prevStep"
@@ -301,7 +314,8 @@
             <button
               v-if="!submitting"
               type="submit"
-              class="flex-[2] btn-success py-3.5 text-base font-bold flex items-center justify-center space-x-2"
+              :disabled="!receiptFile || !prescriptionFile"
+              class="flex-[2] btn-success py-3.5 text-base font-bold flex items-center justify-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -527,6 +541,12 @@ const cancelSubmission = () => {
 
 const submitClaim = async () => {
   try {
+    // Validate documents are uploaded
+    if (!receiptFile.value || !prescriptionFile.value) {
+      showError('Please upload both the Hospital Receipt and Doctor\'s Prescription');
+      return;
+    }
+
     submitting.value = true;
     error.value = '';
     result.value = null;
@@ -556,51 +576,40 @@ const submitClaim = async () => {
     
     let finalResult = mlResponse;
 
-    // Step 2: If both prescription and receipt are uploaded, verify images
-    if (prescriptionFile.value && receiptFile.value) {
-      console.log('📸 Step 2: Uploading images for AI verification...');
+    // Step 2: Verify images with AI (both files are mandatory)
+    console.log('📸 Step 2: Uploading images for AI verification...');
+    
+    try {
+      const imageResponse = await api.verifyImages(
+        mlResponse.claim_id,
+        prescriptionFile.value,
+        receiptFile.value
+      );
       
-      try {
-        const imageResponse = await api.verifyImages(
-          mlResponse.claim_id,
-          prescriptionFile.value,
-          receiptFile.value
-        );
-        
-        console.log('✅ Image Verification complete.');
-        console.log('   Image Score:', `${imageResponse.image_verification.score.toFixed(1)}%`);
-        console.log('   Combined Score:', `${imageResponse.combined_score.toFixed(1)}%`);
-        console.log('   Final Status:', imageResponse.final_status);
-        
-        // Update result with image verification data
-        finalResult = {
-          ...mlResponse,
-          image_verification: imageResponse.image_verification,
-          combined_score: imageResponse.combined_score,
-          final_status: imageResponse.final_status,
-          message: imageResponse.message
-        };
-        
-        // Show success/error based on combined score
-        if (imageResponse.final_status === 'genuine') {
-          showSuccess(`🎉 Claim approved! Combined AI Score: ${imageResponse.combined_score.toFixed(1)}%`);
-        } else {
-          showError(`⚠️ Claim rejected. Combined AI Score: ${imageResponse.combined_score.toFixed(1)}% (below 80% threshold)`);
-        }
-      } catch (imageErr) {
-        console.error('Image verification failed:', imageErr);
-        showError('⚠️ Image verification failed, but ML prediction completed: ' + (imageErr.response?.data?.detail || imageErr.message));
-        // Still show ML result even if image verification fails
-      }
-    } else {
-      console.log('ℹ️ No images uploaded. Using ML prediction only.');
+      console.log('✅ Image Verification complete.');
+      console.log('   Image Score:', `${imageResponse.image_verification.score.toFixed(1)}%`);
+      console.log('   Combined Score:', `${imageResponse.combined_score.toFixed(1)}%`);
+      console.log('   Final Status:', imageResponse.final_status);
       
-      // Show success/error based on ML prediction only
-      if (mlResponse.prediction_label === 'genuine') {
-        showSuccess('🎉 Claim approved by ML! Upload images for higher accuracy.');
+      // Update result with image verification data
+      finalResult = {
+        ...mlResponse,
+        image_verification: imageResponse.image_verification,
+        combined_score: imageResponse.combined_score,
+        final_status: imageResponse.final_status,
+        message: imageResponse.message
+      };
+      
+      // Show success/error based on combined score
+      if (imageResponse.final_status === 'genuine') {
+        showSuccess(`🎉 Claim approved! Combined AI Score: ${imageResponse.combined_score.toFixed(1)}%`);
       } else {
-        showError('⚠️ Claim rejected by ML verification.');
+        showError(`⚠️ Claim rejected. Combined AI Score: ${imageResponse.combined_score.toFixed(1)}% (below 80% threshold)`);
       }
+    } catch (imageErr) {
+      console.error('Image verification failed:', imageErr);
+      showError('⚠️ Image verification failed, but ML prediction completed: ' + (imageErr.response?.data?.detail || imageErr.message));
+      // Still show ML result even if image verification fails
     }
     
     result.value = finalResult;
