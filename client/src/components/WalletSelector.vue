@@ -64,22 +64,20 @@
             </button>
           </div>
 
-          <!-- Wallet Options - Horizontal layout (3 across) -->
-          <div v-else class="grid grid-cols-3 gap-4">
+          <!-- Wallet Options -->
+          <div v-else class="flex justify-center">
             <button
-              v-for="wallet in supportedWallets"
-              :key="wallet.key"
-              @click="connectWallet(wallet.key)"
-              :disabled="!wallet.available"
-              class="wallet-card group"
-              :class="wallet.available ? 'hover:border-accent-orange hover:bg-orange-50' : 'opacity-50 cursor-not-allowed'"
+              @click="connectWallet('lace')"
+              :disabled="!laceWallet.available"
+              class="wallet-card group w-full max-w-xs"
+              :class="laceWallet.available ? 'hover:border-accent-orange hover:bg-orange-50' : 'opacity-50 cursor-not-allowed'"
             >
               <div class="flex flex-col items-center text-center space-y-3">
                 <!-- Wallet Logo -->
-                <div class="wallet-icon" :style="{ backgroundColor: wallet.color }">
+                <div class="wallet-icon" :style="{ backgroundColor: laceWallet.color }">
                   <img 
-                    :src="wallet.icon" 
-                    :alt="wallet.name"
+                    :src="laceWallet.icon" 
+                    :alt="laceWallet.name"
                     class="w-8 h-8 object-contain"
                     @error="handleImageError"
                   />
@@ -88,10 +86,10 @@
                 <!-- Wallet Info -->
                 <div>
                   <div class="font-semibold text-main-blue group-hover:text-accent-orange transition">
-                    {{ wallet.name }}
+                    {{ laceWallet.name }}
                   </div>
                   <div class="text-xs text-dark-gray mt-1">
-                    {{ wallet.available ? 'Click to connect' : 'Not installed' }}
+                    {{ laceWallet.available ? 'Click to connect' : 'Not installed' }}
                   </div>
                 </div>
               </div>
@@ -105,27 +103,13 @@
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
               </svg>
               <div class="text-sm text-blue-700">
-                <strong>New to Cardano wallets?</strong>
+                <strong>Don't have Lace Wallet?</strong>
                 <p class="mt-1">
-                  Download and install a wallet extension:
+                  Download and install the Lace browser extension to get started:
                 </p>
-                <ul class="mt-2 space-y-1">
-                  <li>
-                    <a href="https://namiwallet.io" target="_blank" class="underline hover:no-underline font-medium">
-                      Nami Wallet
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://eternl.io" target="_blank" class="underline hover:no-underline font-medium">
-                      Eternl Wallet
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.lace.io" target="_blank" class="underline hover:no-underline font-medium">
-                      Lace Wallet
-                    </a>
-                  </li>
-                </ul>
+                <a href="https://www.lace.io" target="_blank" class="inline-block mt-2 underline hover:no-underline font-medium">
+                  www.lace.io →
+                </a>
               </div>
             </div>
           </div>
@@ -153,33 +137,15 @@ const connectedWalletName = ref('');
 const connectingWallet = ref('');
 const error = ref(null);
 
-// Supported Wallets Configuration - Nami, Eternl, Lace
-const supportedWallets = ref([
-  {
-    key: 'nami',
-    name: 'Nami',
-    icon: '/nami-icon.png',
-    color: 'rgba(147, 51, 234, 0.15)',
-    textColor: '#7c3aed',
-    available: false
-  },
-  {
-    key: 'eternl',
-    name: 'Eternl',
-    icon: '/eternl-icon-new.png',
-    color: 'rgba(59, 130, 246, 0.15)',
-    textColor: '#2563eb',
-    available: false
-  },
-  {
-    key: 'lace',
-    name: 'Lace',
-    icon: '/lace-icon-new.png',
-    color: 'rgba(236, 72, 153, 0.15)',
-    textColor: '#db2777',
-    available: false
-  }
-]);
+// Lace Wallet Configuration
+const laceWallet = ref({
+  key: 'lace',
+  name: 'Lace',
+  icon: '/lace-icon-new.png',
+  color: 'rgba(236, 72, 153, 0.15)',
+  textColor: '#db2777',
+  available: false
+});
 
 // Handle image loading errors (fallback to first letter if image fails)
 const handleImageError = (event) => {
@@ -194,13 +160,11 @@ const checkWalletAvailability = () => {
     return;
   }
   
-  supportedWallets.value.forEach(wallet => {
-    const isAvailable = !!window.cardano[wallet.key];
-    wallet.available = isAvailable;
-    if (isAvailable) {
-      console.log(`✅ ${wallet.name} wallet detected`);
-    }
-  });
+  const isAvailable = !!window.cardano['lace'];
+  laceWallet.value.available = isAvailable;
+  if (isAvailable) {
+    console.log('✅ Lace wallet detected');
+  }
 };
 
 // Poll for wallet availability - fixes race condition
@@ -212,37 +176,32 @@ const pollForWallets = () => {
     attempts++;
     checkWalletAvailability();
     
-    // Check if we found any wallets
-    const hasWallets = supportedWallets.value.some(w => w.available);
-    
-    if (hasWallets || attempts >= maxAttempts) {
+    // Check if we found the wallet
+    if (laceWallet.value.available || attempts >= maxAttempts) {
       clearInterval(interval);
-      if (hasWallets) {
-        console.log('✅ Wallet polling complete - wallets found');
+      if (laceWallet.value.available) {
+        console.log('✅ Wallet polling complete - Lace found');
       } else {
-        console.log('⚠️ No wallets detected after polling');
+        console.log('⚠️ Lace wallet not detected after polling');
       }
     }
-  }, 300); // Increased from 200ms to 300ms - less aggressive polling
+  }, 300);
 };
 
 const connectWallet = async (walletKey) => {
   // Double-check wallet is available
   if (!window.cardano || !window.cardano[walletKey]) {
-    error.value = `${walletKey} wallet not found. Please make sure the extension is installed and enabled.`;
+    error.value = 'Lace wallet not found. Please make sure the extension is installed and enabled.';
     showError(error.value);
     return;
   }
 
-  const selectedWallet = supportedWallets.value.find(w => w.key === walletKey);
-  if (!selectedWallet) return;
-
   isConnecting.value = true;
-  connectingWallet.value = selectedWallet.name;
+  connectingWallet.value = 'Lace';
   error.value = null;
 
   try {
-    console.log(`🔌 Attempting to connect to ${selectedWallet.name}...`);
+    console.log('🔌 Attempting to connect to Lace...');
     
     // Check if wallet API is ready
     if (!window.cardano[walletKey].enable) {
@@ -257,7 +216,7 @@ const connectWallet = async (walletKey) => {
       )
     ]);
     
-    console.log(`✅ ${selectedWallet.name} API enabled`);
+    console.log(`✅ Lace API enabled`);
 
     // Get network ID
     const networkId = await walletAPI.getNetworkId();
@@ -316,22 +275,22 @@ const connectWallet = async (walletKey) => {
 
     // Store connection info
     walletAddress.value = address;
-    connectedWalletName.value = selectedWallet.name;
+    connectedWalletName.value = 'Lace';
     isConnected.value = true;
 
     // Store in localStorage for persistence
     localStorage.setItem('connectedWallet', walletKey);
     localStorage.setItem('walletAddress', address);
-    localStorage.setItem('walletName', selectedWallet.name);
+    localStorage.setItem('walletName', 'Lace');
 
     // Close modal
     showWalletModal.value = false;
 
     // Emit event
-    emit('wallet-connected', { wallet: walletAPI, address, name: selectedWallet.name });
-    showSuccess(`✅ Connected to ${selectedWallet.name} successfully!`);
+    emit('wallet-connected', { wallet: walletAPI, address, name: 'Lace' });
+    showSuccess('Connected to Lace successfully!');
 
-    console.log(`✅ Successfully connected to ${selectedWallet.name}`);
+    console.log('✅ Successfully connected to Lace');
     console.log('📍 Address:', address);
 
   } catch (err) {
@@ -341,13 +300,13 @@ const connectWallet = async (walletKey) => {
     let errorMessage = 'Failed to connect to wallet.';
     
     if (err.message.includes('timeout')) {
-      errorMessage = `Connection timeout after 30 seconds. Please:\n1. Make sure ${selectedWallet.name} extension is unlocked\n2. Click the ${selectedWallet.name} extension icon in your browser\n3. Approve the connection request\n4. Then try connecting again`;
+      errorMessage = 'Connection timeout after 30 seconds. Please:\n1. Make sure Lace extension is unlocked\n2. Click the Lace extension icon in your browser\n3. Approve the connection request\n4. Then try connecting again';
     } else if (err.message.includes('User rejected') || err.message.includes('user rejected')) {
       errorMessage = 'Connection rejected. Please approve the connection in your wallet.';
     } else if (err.message.includes('not ready')) {
       errorMessage = err.message;
     } else {
-      errorMessage = err.message || `Failed to connect to ${selectedWallet.name}. Please ensure the wallet is unlocked and try again.`;
+      errorMessage = err.message || 'Failed to connect to Lace. Please ensure the wallet is unlocked and try again.';
     }
     
     error.value = errorMessage;
