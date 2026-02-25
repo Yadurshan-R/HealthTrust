@@ -56,11 +56,12 @@ func SubmitTransaction(claim Claim, hashedUserID string) (string, error) {
 	lovelace := int64(claim.AmountADA * 1_000_000)
 
 	// Prepare claim metadata
+	// NOTE: Cardano metadata does NOT support floats — convert amounts to strings
 	metadata := map[string]interface{}{
 		"claim_id":     claim.ID,
 		"user_id":      claim.UserID,
-		"amount_usd":   claim.AmountBilled,
-		"amount_ada":   claim.AmountADA,
+		"amount_usd":   fmt.Sprintf("%.2f", claim.AmountBilled),
+		"amount_ada":   fmt.Sprintf("%.4f", claim.AmountADA),
 		"ml_status":    claim.MLStatus,
 		"claim_type":   "healthcare",
 		"patient_name": claim.UserName,

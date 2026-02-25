@@ -104,7 +104,7 @@ class ProfileUpdateRequest(BaseModel):
 _ada_price_cache = {"price": None, "timestamp": 0}
 ADA_PRICE_CACHE_TTL = 60  # seconds
 
-CMC_API_KEY = os.environ.get("CMC_API_KEY", "15030636822d46cfaac0daa137ec0ba2")
+CMC_API_KEY = os.environ.get("CMC_API_KEY")
 
 
 async def get_ada_usd_price() -> float:

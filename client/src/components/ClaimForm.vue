@@ -165,35 +165,6 @@
             <p class="text-[10px] sm:text-xs text-dark-gray mt-1.5">Total hospital bill in USD including treatments, room charges, and medications</p>
           </div>
 
-          <!-- Live ADA Conversion -->
-          <transition name="fade">
-            <div v-if="formData.amount_billed > 0" class="p-4 rounded-xl border" :class="adaPrice ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'">
-              <div v-if="adaPriceLoading" class="flex items-center space-x-2 text-sm text-secondary-blue">
-                <div class="animate-spin rounded-full h-4 w-4 border-2 border-main-blue border-t-transparent"></div>
-                <span>Fetching live ADA rate...</span>
-              </div>
-              <div v-else-if="adaPrice" class="space-y-2">
-                <div class="flex items-center space-x-2">
-                  <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-bold text-main-blue">₳</span>
-                  </div>
-                  <div>
-                    <p class="text-[10px] text-secondary-blue uppercase tracking-wider font-semibold">Live Exchange Rate</p>
-                    <p class="text-sm font-bold text-main-blue">1 ADA = ${{ adaPrice.toFixed(4) }} USD</p>
-                  </div>
-                </div>
-                <div class="flex items-center justify-between pt-2 border-t border-blue-200">
-                  <span class="text-xs text-secondary-blue font-medium">Your total for this transaction</span>
-                  <span class="text-lg font-extrabold text-main-green">₳{{ adaAmount.toFixed(2) }} ADA</span>
-                </div>
-              </div>
-              <div v-else class="text-xs text-red-500">
-                ⚠️ Unable to fetch ADA rate. Please try again.
-                <button @click="fetchAdaPrice" type="button" class="ml-2 underline text-main-blue">Retry</button>
-              </div>
-            </div>
-          </transition>
-
           <div class="flex gap-3 pt-2">
             <button type="button" @click="prevStep"
               class="flex-1 py-3.5 border-2 border-gray-200 text-secondary-blue font-semibold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center space-x-2">
@@ -320,6 +291,33 @@
             </div>
           </div>
 
+          <!-- ADA Conversion Card -->
+          <div class="p-4 rounded-xl border" :class="adaPrice ? 'bg-blue-50 border-blue-200' : adaPriceLoading ? 'bg-gray-50 border-gray-200' : 'bg-red-50 border-red-200'">
+            <div v-if="adaPriceLoading" class="flex items-center space-x-2 text-sm text-secondary-blue">
+              <div class="animate-spin rounded-full h-4 w-4 border-2 border-main-blue border-t-transparent"></div>
+              <span>Fetching current ADA exchange rate...</span>
+            </div>
+            <div v-else-if="adaPrice" class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm font-bold text-main-blue">₳</span>
+                </div>
+                <div>
+                  <p class="text-[10px] text-secondary-blue uppercase tracking-wider font-semibold">Current Exchange Rate</p>
+                  <p class="text-sm font-bold text-main-blue">1 ADA = ${{ adaPrice.toFixed(4) }} USD</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-2 border-t border-blue-200">
+                <span class="text-xs text-secondary-blue font-medium">Your total for this transaction</span>
+                <span class="text-lg font-extrabold text-main-green">₳{{ adaAmount.toFixed(2) }} ADA</span>
+              </div>
+            </div>
+            <div v-else class="flex items-center justify-between">
+              <span class="text-xs text-red-600">⚠️ Unable to fetch ADA exchange rate.</span>
+              <button @click="fetchAdaPrice" type="button" class="text-xs font-semibold text-main-blue underline">Retry</button>
+            </div>
+          </div>
+
           <!-- Missing documents warning -->
           <transition name="fade">
             <div v-if="!receiptFile || !prescriptionFile" class="flex items-start space-x-3 p-3.5 bg-amber-50 rounded-xl border border-amber-200">
@@ -440,7 +438,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { api } from '../api.js';
 import { useToast } from '../composables/useToast';
 
@@ -466,7 +464,13 @@ const currentStep = ref(0);
 const steps = ['Hospital Stay', 'Diagnosis & Billing', 'Documents & Submit'];
 
 const nextStep = () => {
-  if (currentStep.value < steps.length - 1) currentStep.value++;
+  if (currentStep.value < steps.length - 1) {
+    // Fetch ADA price when moving from Diagnosis → Documents step
+    if (currentStep.value === 1) {
+      fetchAdaPrice();
+    }
+    currentStep.value++;
+  }
 };
 const prevStep = () => {
   if (currentStep.value > 0) currentStep.value--;
@@ -518,12 +522,6 @@ const fetchAdaPrice = async () => {
     adaPriceLoading.value = false;
   }
 };
-
-// Fetch ADA price on mount and refresh every 60 seconds
-onMounted(() => {
-  fetchAdaPrice();
-  setInterval(fetchAdaPrice, 60000);
-});
 
 // File upload handlers
 const handleReceiptUpload = (event) => {

@@ -214,12 +214,13 @@ app.post('/api/payout-transaction', async (req: Request, res: Response) => {
         tx.sendLovelace(recipientAddress, amountLovelace.toString());
 
         // Attach claim metadata on-chain (label 674 = CIP-20 transaction message)
+        // NOTE: Cardano metadata does NOT support floats — all values must be strings/ints
         tx.setMetadata(674, {
             msg: ['HealthTrust Insurance Payout'],
             claim_id: claimMetadata.claim_id,
             user_id: claimMetadata.user_id,
-            amount_usd: claimMetadata.amount_usd || claimMetadata.amount,
-            amount_ada: claimMetadata.amount_ada || claimMetadata.amount,
+            amount_usd: String(claimMetadata.amount_usd || claimMetadata.amount),
+            amount_ada: String(claimMetadata.amount_ada || claimMetadata.amount),
             ml_status: claimMetadata.ml_status,
             claim_type: claimMetadata.claim_type,
             patient: claimMetadata.patient_name || 'N/A',
