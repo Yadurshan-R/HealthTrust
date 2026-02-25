@@ -117,8 +117,8 @@
                 <p class="mt-1">
                   Download and install the Lace browser extension to get started:
                 </p>
-                <a href="https://www.lace.io" target="_blank" class="inline-block mt-2 underline hover:no-underline font-medium">
-                  www.lace.io →
+                <a href="https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk?hl=en" target="_blank" class="inline-block mt-2 underline hover:no-underline font-medium">
+                  Install from Chrome Web Store →
                 </a>
               </div>
             </div>
