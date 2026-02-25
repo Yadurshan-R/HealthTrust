@@ -29,9 +29,22 @@
           <div class="bg-gradient-to-r from-main-blue to-main-green p-6 rounded-xl text-white">
             <div class="flex items-center justify-between mb-3">
               <h3 class="text-lg font-semibold">Blockchain Transaction</h3>
-              <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-medium">
-                ✓ Verified
-              </span>
+              <div class="flex items-center space-x-2">
+                <button
+                  @click="refreshBlockchainData"
+                  :disabled="fetchingBlockchain"
+                  class="flex items-center space-x-1 px-2.5 py-1 bg-white/20 hover:bg-white/30 rounded-full text-xs font-medium transition disabled:opacity-50"
+                  title="Refresh transaction data"
+                >
+                  <svg class="w-3.5 h-3.5" :class="{ 'animate-spin': fetchingBlockchain }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span>{{ fetchingBlockchain ? 'Refreshing...' : 'Refresh' }}</span>
+                </button>
+                <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-medium">
+                  ✓ Verified
+                </span>
+              </div>
             </div>
             
             <div class="space-y-2">
@@ -277,6 +290,14 @@ const fetchBlockchainData = async () => {
     console.error('Error fetching blockchain data:', error);
   } finally {
     fetchingBlockchain.value = false;
+  }
+};
+
+const refreshBlockchainData = async () => {
+  blockchainData.value = null;
+  await fetchBlockchainData();
+  if (blockchainData.value) {
+    showSuccess('Transaction data refreshed ✓');
   }
 };
 

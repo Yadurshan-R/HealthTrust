@@ -197,7 +197,7 @@
               <ClaimsList
                 :claims="userData?.claims || []"
                 @trigger-payout="triggerPayout"
-                @refresh="refreshUserData"
+                @refresh="handleRefresh"
               />
             </template>
           </BaseModal>
@@ -209,7 +209,7 @@
                 :claims="userData?.claims || []"
                 :filter-type="activeFilter"
                 @trigger-payout="triggerPayout"
-                @refresh="refreshUserData"
+                @refresh="handleRefresh"
               />
             </template>
           </BaseModal>
@@ -385,7 +385,8 @@ const onWalletDisconnected = () => {
   showClaimForm.value = false;
 };
 
-const refreshUserData = async () => {
+const refreshUserData = async (options = {}) => {
+  const { silent = false, message = null } = options;
   try {
     userData.value = await api.getUserByWallet(connectedAddress.value);
 
@@ -396,7 +397,9 @@ const refreshUserData = async () => {
         showProfileSetup.value = true;
         showInfo('Welcome! Please set up your profile to get started.');
       }, 500);
-    } else {
+    } else if (message) {
+      showSuccess(message);
+    } else if (!silent) {
       showSuccess(`Welcome back, ${userData.value.name}! 👋`);
     }
   } catch (err) {
@@ -404,17 +407,21 @@ const refreshUserData = async () => {
   }
 };
 
+const handleRefresh = async () => {
+  await refreshUserData({ silent: true, message: 'Claims refreshed ✓' });
+};
+
 const onClaimSubmitted = () => {
   showClaimForm.value = false; // Close form after submission
-  refreshUserData();
+  refreshUserData({ silent: true, message: 'Claim submitted! Check your claims below. 📋' });
 };
 
 const triggerPayout = async (claimId) => {
   try {
     // Send the connected wallet address to ensure payout goes to currently connected wallet
     await api.triggerPayout(claimId, connectedAddress.value);
-    await refreshUserData();
-    showSuccess('Payout triggered! Transaction will be processed within 60 seconds.');
+    await refreshUserData({ silent: true });
+    showSuccess('Payout triggered! Transaction will be processed within 60 seconds. 🚀');
   } catch (err) {
     showError(`Failed to trigger payout: ${err.response?.data?.detail || err.message}`);
   }
