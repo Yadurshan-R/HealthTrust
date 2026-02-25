@@ -81,7 +81,7 @@
                     <img 
                       :src="laceWallet.icon" 
                       :alt="laceWallet.name"
-                      class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300"
+                      class="w-12 h-12 rounded-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                   </div>
                 </div>
