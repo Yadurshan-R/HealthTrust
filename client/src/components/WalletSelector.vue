@@ -72,14 +72,13 @@
               class="group w-full max-w-sm bg-white border-2 border-gray-200 rounded-2xl p-6 transition-all duration-300 hover:border-main-blue hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
             >
               <div class="flex items-center space-x-5">
-                <!-- Wallet Logo -->
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-50 to-purple-50 border border-pink-100 flex items-center justify-center flex-shrink-0 group-hover:shadow-md transition-all duration-300">
-                  <img 
-                    :src="laceWallet.icon" 
-                    :alt="laceWallet.name"
-                    class="w-10 h-10 object-contain"
-                    @error="handleImageError"
-                  />
+                <!-- Wallet Logo - SVG with animated gradient -->
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#7b61ff] to-[#e84393] flex items-center justify-center flex-shrink-0 shadow-md group-hover:shadow-[0_0_20px_rgba(123,97,255,0.4)] group-hover:scale-110 transition-all duration-300">
+                  <svg class="w-9 h-9 text-white drop-shadow-sm" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 4h2v12h6v2H6V4z" fill="currentColor" opacity="0.9"/>
+                    <circle cx="17" cy="7" r="3" stroke="currentColor" stroke-width="1.5" fill="none" class="group-hover:animate-ping" style="animation-duration: 1.5s;" />
+                    <circle cx="17" cy="7" r="3" fill="currentColor" opacity="0.3"/>
+                  </svg>
                 </div>
                 
                 <!-- Wallet Info -->
