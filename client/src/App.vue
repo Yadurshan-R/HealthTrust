@@ -65,21 +65,21 @@
                 </div>
               </div>
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 sm:p-4 border border-blue-100">
-                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Patient</div>
-                  <div class="text-sm sm:text-base font-bold text-main-blue truncate">{{ userData.name }}</div>
+                <div class="bg-gray-50 rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div class="text-[10px] sm:text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Patient</div>
+                  <div class="text-sm sm:text-base font-bold text-gray-900 truncate">{{ userData.name }}</div>
                 </div>
-                <div class="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl p-3 sm:p-4 border border-green-100">
-                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Wallet</div>
-                  <div class="text-sm sm:text-base font-bold text-main-green truncate">{{ connectedWalletName }}</div>
+                <div class="bg-gray-50 rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div class="text-[10px] sm:text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Wallet</div>
+                  <div class="text-sm sm:text-base font-bold text-gray-900 truncate">{{ connectedWalletName }}</div>
                 </div>
-                <div class="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-3 sm:p-4 border border-purple-100">
-                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Expiry</div>
-                  <div class="text-sm sm:text-base font-bold text-purple-700">{{ new Date(userData.expiry_date).toLocaleDateString() }}</div>
+                <div class="bg-gray-50 rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div class="text-[10px] sm:text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Expiry</div>
+                  <div class="text-sm sm:text-base font-bold text-gray-900">{{ new Date(userData.expiry_date).toLocaleDateString() }}</div>
                 </div>
-                <div class="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-xl p-3 sm:p-4 border border-orange-100">
-                  <div class="text-[10px] sm:text-xs font-medium text-secondary-blue mb-1 uppercase tracking-wider">Premium</div>
-                  <div class="text-sm sm:text-base font-bold text-accent-orange">₳{{ userData.premium }}</div>
+                <div class="bg-gray-50 rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div class="text-[10px] sm:text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Premium</div>
+                  <div class="text-sm sm:text-base font-bold text-gray-900">₳{{ userData.premium }}</div>
                 </div>
               </div>
             </div>
