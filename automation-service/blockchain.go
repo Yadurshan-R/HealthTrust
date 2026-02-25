@@ -57,15 +57,14 @@ func SubmitTransaction(claim Claim, hashedUserID string) (string, error) {
 
 	// Prepare claim metadata
 	// NOTE: Cardano metadata does NOT support floats — convert amounts to strings
+	// NOTE: No PII (name, user_id) on-chain — only hashed_id for privacy
 	metadata := map[string]interface{}{
-		"claim_id":     claim.ID,
-		"user_id":      claim.UserID,
-		"amount_usd":   fmt.Sprintf("%.2f", claim.AmountBilled),
-		"amount_ada":   fmt.Sprintf("%.4f", claim.AmountADA),
-		"ml_status":    claim.MLStatus,
-		"claim_type":   "healthcare",
-		"patient_name": claim.UserName,
-		"hashed_id":    hashedUserID,
+		"claim_id":   claim.ID,
+		"amount_usd": fmt.Sprintf("%.2f", claim.AmountBilled),
+		"amount_ada": fmt.Sprintf("%.4f", claim.AmountADA),
+		"ml_status":  claim.MLStatus,
+		"claim_type": "healthcare",
+		"hashed_id":  hashedUserID,
 	}
 
 	// Build request (includes hashedUserId for Aiken smart contract datum)
