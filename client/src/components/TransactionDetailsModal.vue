@@ -297,7 +297,7 @@ const refreshBlockchainData = async () => {
   blockchainData.value = null;
   await fetchBlockchainData();
   if (blockchainData.value) {
-    showSuccess('Transaction data refreshed ✓');
+    showSuccess('Transaction data refreshed');
   }
 };
 

@@ -408,7 +408,7 @@ const refreshUserData = async (options = {}) => {
 };
 
 const handleRefresh = async () => {
-  await refreshUserData({ silent: true, message: 'Claims refreshed ✓' });
+  await refreshUserData({ silent: true, message: 'Claims refreshed' });
 };
 
 const onClaimSubmitted = () => {
