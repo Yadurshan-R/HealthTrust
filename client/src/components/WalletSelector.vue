@@ -75,9 +75,9 @@
                 <!-- Wallet Logo - Interactive with animated ring -->
                 <div class="relative w-16 h-16 flex-shrink-0">
                   <!-- Animated gradient ring -->
-                  <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#7b61ff] via-[#e84393] to-[#7b61ff] opacity-0 group-hover:opacity-100 group-hover:animate-spin-slow blur-sm transition-opacity duration-500" style="animation-duration: 3s;"></div>
+                  <div class="absolute inset-0 rounded-full bg-gradient-to-r from-[#7b61ff] via-[#e84393] to-[#7b61ff] opacity-0 group-hover:opacity-100 group-hover:animate-spin-slow blur-sm transition-opacity duration-500" style="animation-duration: 3s;"></div>
                   <!-- Inner container -->
-                  <div class="relative w-full h-full rounded-2xl bg-white border-2 border-gray-200 group-hover:border-transparent flex items-center justify-center overflow-hidden group-hover:shadow-[0_0_20px_rgba(123,97,255,0.35)] group-hover:scale-110 transition-all duration-300">
+                  <div class="relative w-full h-full rounded-full bg-white border-2 border-gray-200 group-hover:border-transparent flex items-center justify-center overflow-hidden group-hover:shadow-[0_0_20px_rgba(123,97,255,0.35)] group-hover:scale-110 transition-all duration-300">
                     <img 
                       :src="laceWallet.icon" 
                       :alt="laceWallet.name"
