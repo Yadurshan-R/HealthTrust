@@ -64,33 +64,39 @@
             </button>
           </div>
 
-          <!-- Wallet Options -->
+          <!-- Wallet Option -->
           <div v-else class="flex justify-center">
             <button
               @click="connectWallet('lace')"
               :disabled="!laceWallet.available"
-              class="wallet-card group w-full max-w-xs"
-              :class="laceWallet.available ? 'hover:border-accent-orange hover:bg-orange-50' : 'opacity-50 cursor-not-allowed'"
+              class="group w-full max-w-sm bg-white border-2 border-gray-200 rounded-2xl p-6 transition-all duration-300 hover:border-main-blue hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
             >
-              <div class="flex flex-col items-center text-center space-y-3">
+              <div class="flex items-center space-x-5">
                 <!-- Wallet Logo -->
-                <div class="wallet-icon" :style="{ backgroundColor: laceWallet.color }">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-50 to-purple-50 border border-pink-100 flex items-center justify-center flex-shrink-0 group-hover:shadow-md transition-all duration-300">
                   <img 
                     :src="laceWallet.icon" 
                     :alt="laceWallet.name"
-                    class="w-8 h-8 object-contain"
+                    class="w-10 h-10 object-contain"
                     @error="handleImageError"
                   />
                 </div>
                 
                 <!-- Wallet Info -->
-                <div>
-                  <div class="font-semibold text-main-blue group-hover:text-accent-orange transition">
-                    {{ laceWallet.name }}
+                <div class="flex-1 text-left">
+                  <div class="text-lg font-bold text-gray-900 group-hover:text-main-blue transition">
+                    Lace Wallet
                   </div>
-                  <div class="text-xs text-dark-gray mt-1">
-                    {{ laceWallet.available ? 'Click to connect' : 'Not installed' }}
+                  <div class="text-sm text-gray-500 mt-0.5">
+                    {{ laceWallet.available ? 'Click to connect' : 'Extension not detected' }}
                   </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="flex-shrink-0 text-gray-300 group-hover:text-main-blue group-hover:translate-x-1 transition-all duration-300">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
             </button>
@@ -404,18 +410,6 @@ defineExpose({
 </script>
 
 <style scoped>
-.wallet-card {
-  @apply bg-white border-2 border-gray-200 rounded-xl p-4 transition-all duration-200;
-}
-
-.wallet-card:hover:not(:disabled) {
-  @apply shadow-lg transform scale-105;
-}
-
-.wallet-icon {
-  @apply w-10 h-10 rounded-full flex items-center justify-center;
-}
-
 .animate-spin {
   animation: spin 1s linear infinite;
 }
