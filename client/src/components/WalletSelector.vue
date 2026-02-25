@@ -39,7 +39,7 @@
     <BaseModal v-model="showWalletModal" title="Connect Your Wallet">
       <template #body>
         <div class="p-6">
-          <p class="text-secondary-blue mb-6">Choose your preferred Cardano wallet to continue</p>
+          <p class="text-secondary-blue mb-6">Connect your Lace wallet (Preprod testnet) to continue</p>
 
           <!-- Loading State -->
           <div v-if="isConnecting" class="flex flex-col items-center justify-center py-12">
