@@ -54,7 +54,8 @@
               <div class="text-base font-bold text-main-blue">#{{ claim.id }}</div>
             </div>
             <div class="text-right">
-              <div class="text-lg sm:text-xl font-bold text-main-green">₳{{ claim.amount_billed.toFixed(2) }}</div>
+              <div class="text-lg sm:text-xl font-bold text-main-green">${{ claim.amount_billed.toFixed(2) }}</div>
+              <div v-if="claim.amount_ada" class="text-[10px] font-semibold text-main-blue">≈ ₳{{ claim.amount_ada.toFixed(2) }} ADA</div>
               <div class="text-[10px] text-dark-gray">{{ formatDate(claim.created_at) }}</div>
             </div>
           </div>
@@ -222,7 +223,8 @@ const showTransaction = (claim) => {
       age: claim.age,
       gender: claim.gender,
       diagnosis: claim.diagnosis,
-      amount_billed: claim.amount_billed,  // Fixed: was claim.amount
+      amount_billed: claim.amount_billed,  // USD amount
+      amount_ada: claim.amount_ada,  // ADA equivalent
       confidence: claim.confidence,  // Added: ML confidence score
       created_at: claim.created_at,
     },

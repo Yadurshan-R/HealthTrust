@@ -19,6 +19,7 @@ type Claim struct {
 	UserEmail     string
 	WalletAddress string
 	AmountBilled  float64
+	AmountADA     float64
 	MLStatus      string
 	PayoutStatus  string
 }
@@ -53,6 +54,7 @@ func GetPendingPayouts() ([]Claim, error) {
 			u.email, 
 			COALESCE(c.payout_address, u.wallet_address) as wallet_address,
 			c.amount_billed,
+			COALESCE(c.amount_ada, c.amount_billed) as amount_ada,
 			c.ml_status,
 			c.payout_status
 		FROM claims c
@@ -77,6 +79,7 @@ func GetPendingPayouts() ([]Claim, error) {
 			&claim.UserEmail,
 			&claim.WalletAddress,
 			&claim.AmountBilled,
+			&claim.AmountADA,
 			&claim.MLStatus,
 			&claim.PayoutStatus,
 		)

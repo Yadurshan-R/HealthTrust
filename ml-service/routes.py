@@ -13,6 +13,8 @@ import logging
 import tempfile
 import os
 import random
+import time
+import httpx
 
 from model_loader import get_model, FraudDetectionModel
 from database import get_db, User, Claim
@@ -30,7 +32,8 @@ router = APIRouter()
 class ClaimRequest(BaseModel):
     """Request model for claim prediction"""
     user_id: int = Field(..., description="User ID from database", gt=0)
-    amount_billed: float = Field(..., description="Claim amount", gt=0)
+    amount_billed: float = Field(..., description="Claim amount in USD", gt=0)
+    amount_ada: float = Field(..., description="Equivalent amount in ADA at time of submission", gt=0)
     diagnosis: str = Field(..., description="Diagnosis category")
 
     @validator('diagnosis')
@@ -52,6 +55,7 @@ class ClaimResponse(BaseModel):
     confidence: float
     ml_status: str
     message: str
+    amount_ada: Optional[float] = None
 
 
 class UserClaimsResponse(BaseModel):
@@ -95,8 +99,54 @@ class ProfileUpdateRequest(BaseModel):
 
 
 # ==============================
+# ADA Price Cache (CoinMarketCap)
+# ==============================
+_ada_price_cache = {"price": None, "timestamp": 0}
+ADA_PRICE_CACHE_TTL = 60  # seconds
+
+CMC_API_KEY = os.environ.get("CMC_API_KEY", "15030636822d46cfaac0daa137ec0ba2")
+
+
+async def get_ada_usd_price() -> float:
+    """Fetch current ADA/USD price from CoinMarketCap with 60s caching."""
+    now = time.time()
+    if _ada_price_cache["price"] and (now - _ada_price_cache["timestamp"]) < ADA_PRICE_CACHE_TTL:
+        return _ada_price_cache["price"]
+
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.get(
+                "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest",
+                params={"symbol": "ADA", "convert": "USD"},
+                headers={"X-CMC_PRO_API_KEY": CMC_API_KEY},
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            price = data["data"]["ADA"][0]["quote"]["USD"]["price"]
+            _ada_price_cache["price"] = price
+            _ada_price_cache["timestamp"] = now
+            logger.info(f"ADA price fetched: ${price:.4f}")
+            return price
+    except Exception as e:
+        logger.error(f"Failed to fetch ADA price: {e}")
+        if _ada_price_cache["price"]:
+            return _ada_price_cache["price"]  # Return stale cache
+        raise HTTPException(status_code=503, detail="Unable to fetch ADA price")
+
+
+# ==============================
 # Endpoints
 # ==============================
+
+@router.get("/ada-price")
+async def get_ada_price():
+    """Get current ADA/USD exchange rate from CoinMarketCap."""
+    price = await get_ada_usd_price()
+    return {
+        "ada_usd": price,
+        "timestamp": datetime.utcnow().isoformat(),
+    }
+
 
 @router.get("/", response_model=HealthResponse)
 async def health_check(model: FraudDetectionModel = Depends(get_model)):
@@ -142,6 +192,7 @@ async def predict_claim(
         new_claim = Claim(
             user_id=claim.user_id,
             amount_billed=claim.amount_billed,
+            amount_ada=claim.amount_ada,
             age=user_age,
             gender=user_gender,
             diagnosis=claim.diagnosis,
@@ -180,7 +231,8 @@ async def predict_claim(
         print(f"   Gender:             {user_gender}")
         print(f"\n🏥 MEDICAL INFORMATION:")
         print(f"   Diagnosis:          {claim.diagnosis}")
-        print(f"   Amount Billed:      ₳{claim.amount_billed:,.2f} ADA")
+        print(f"   Amount Billed:      ${claim.amount_billed:,.2f} USD")
+        print(f"   Amount in ADA:      ₳{claim.amount_ada:,.4f} ADA")
         print(f"\n🤖 AI FRAUD DETECTION RESULT:")
         print(f"   Prediction:         {prediction_result['prediction_label'].upper()}")
         print(f"   Confidence Score:   {prediction_result['confidence']:.2%}")
@@ -204,7 +256,8 @@ async def predict_claim(
             prediction_label=prediction_result['prediction_label'],
             confidence=prediction_result['confidence'],
             ml_status=new_claim.ml_status,
-            message=message
+            message=message,
+            amount_ada=float(claim.amount_ada) if claim.amount_ada else None
         )
 
     except HTTPException:
@@ -248,6 +301,7 @@ async def get_user_by_wallet(
         claims_data.append({
             'id': claim.id,
             'amount_billed': float(claim.amount_billed),
+            'amount_ada': float(claim.amount_ada) if claim.amount_ada else None,
             'age': claim.age,
             'gender': claim.gender,
             'diagnosis': claim.diagnosis,
@@ -399,6 +453,7 @@ async def get_recent_activity(
             "claim_id": claim.id,
             "status": status,
             "amount": float(claim.amount_billed),
+            "amount_ada": float(claim.amount_ada) if claim.amount_ada else None,
             "diagnosis": claim.diagnosis,
             "tx_hash": claim.tx_hash,
             "payout_status": claim.payout_status,

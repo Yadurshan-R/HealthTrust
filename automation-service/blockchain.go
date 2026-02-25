@@ -52,13 +52,15 @@ func SubmitTransaction(claim Claim, hashedUserID string) (string, error) {
 	log.Printf("   🔗 Calling blockchain service...")
 
 	// Convert ADA to lovelace (1 ADA = 1,000,000 lovelace)
-	lovelace := int64(claim.AmountBilled * 1_000_000)
+	// Use amount_ada (the USD→ADA conversion done at claim submission time)
+	lovelace := int64(claim.AmountADA * 1_000_000)
 
 	// Prepare claim metadata
 	metadata := map[string]interface{}{
 		"claim_id":     claim.ID,
 		"user_id":      claim.UserID,
-		"amount":       claim.AmountBilled,
+		"amount_usd":   claim.AmountBilled,
+		"amount_ada":   claim.AmountADA,
 		"ml_status":    claim.MLStatus,
 		"claim_type":   "healthcare",
 		"patient_name": claim.UserName,
@@ -79,8 +81,8 @@ func SubmitTransaction(claim Claim, hashedUserID string) (string, error) {
 		return "", fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	log.Printf("   📤 Sending %d lovelace (%.2f ADA) to %s",
-		lovelace, claim.AmountBilled, claim.WalletAddress[:20]+"...")
+	log.Printf("   📤 Sending %d lovelace (%.2f ADA / $%.2f USD) to %s",
+		lovelace, claim.AmountADA, claim.AmountBilled, claim.WalletAddress[:20]+"...")
 
 	// Make HTTP POST request (120s timeout: TX build + sign + submit to Cardano)
 	client := &http.Client{Timeout: 120 * time.Second}

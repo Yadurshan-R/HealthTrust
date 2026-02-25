@@ -147,10 +147,10 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Total Amount Billed (₳) *</label>
+            <label class="block text-xs font-semibold text-secondary-blue mb-1.5 uppercase tracking-wider">Total Amount Billed ($) *</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span class="text-dark-gray text-xl font-bold">₳</span>
+                <span class="text-dark-gray text-xl font-bold">$</span>
               </div>
               <input
                 v-model.number="formData.amount_billed"
@@ -162,8 +162,37 @@
                 placeholder="0.00"
               />
             </div>
-            <p class="text-[10px] sm:text-xs text-dark-gray mt-1.5">Total hospital bill including treatments, room charges, and medications</p>
+            <p class="text-[10px] sm:text-xs text-dark-gray mt-1.5">Total hospital bill in USD including treatments, room charges, and medications</p>
           </div>
+
+          <!-- Live ADA Conversion -->
+          <transition name="fade">
+            <div v-if="formData.amount_billed > 0" class="p-4 rounded-xl border" :class="adaPrice ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'">
+              <div v-if="adaPriceLoading" class="flex items-center space-x-2 text-sm text-secondary-blue">
+                <div class="animate-spin rounded-full h-4 w-4 border-2 border-main-blue border-t-transparent"></div>
+                <span>Fetching live ADA rate...</span>
+              </div>
+              <div v-else-if="adaPrice" class="space-y-2">
+                <div class="flex items-center space-x-2">
+                  <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <span class="text-sm font-bold text-main-blue">₳</span>
+                  </div>
+                  <div>
+                    <p class="text-[10px] text-secondary-blue uppercase tracking-wider font-semibold">Live Exchange Rate</p>
+                    <p class="text-sm font-bold text-main-blue">1 ADA = ${{ adaPrice.toFixed(4) }} USD</p>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between pt-2 border-t border-blue-200">
+                  <span class="text-xs text-secondary-blue font-medium">Your total for this transaction</span>
+                  <span class="text-lg font-extrabold text-main-green">₳{{ adaAmount.toFixed(2) }} ADA</span>
+                </div>
+              </div>
+              <div v-else class="text-xs text-red-500">
+                ⚠️ Unable to fetch ADA rate. Please try again.
+                <button @click="fetchAdaPrice" type="button" class="ml-2 underline text-main-blue">Retry</button>
+              </div>
+            </div>
+          </transition>
 
           <div class="flex gap-3 pt-2">
             <button type="button" @click="prevStep"
@@ -280,8 +309,9 @@
                 <div class="font-semibold text-gray-900 truncate">{{ formData.diagnosis || '—' }}</div>
               </div>
               <div>
-                <div class="text-[10px] text-dark-gray">Amount</div>
-                <div class="font-bold text-main-green">₳{{ formData.amount_billed || '0' }}</div>
+                <div class="text-[10px] text-dark-gray">Amount (USD)</div>
+                <div class="font-bold text-main-green">${{ formData.amount_billed || '0' }}</div>
+                <div v-if="adaPrice && formData.amount_billed" class="text-[10px] text-main-blue font-semibold">≈ ₳{{ adaAmount.toFixed(2) }} ADA</div>
               </div>
               <div>
                 <div class="text-[10px] text-dark-gray">Documents</div>
@@ -410,7 +440,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { api } from '../api.js';
 import { useToast } from '../composables/useToast';
 
@@ -461,6 +491,39 @@ const receiptFile = ref(null);
 const prescriptionFile = ref(null);
 const receiptFileName = ref('');
 const prescriptionFileName = ref('');
+
+// ADA price state
+const adaPrice = ref(null);          // Current ADA price in USD (e.g. 0.75)
+const adaPriceLoading = ref(false);
+const adaPriceError = ref(false);
+
+// Computed: ADA equivalent of the USD amount
+const adaAmount = computed(() => {
+  if (!adaPrice.value || !formData.value.amount_billed) return 0;
+  return formData.value.amount_billed / adaPrice.value;
+});
+
+// Fetch ADA price from backend
+const fetchAdaPrice = async () => {
+  adaPriceLoading.value = true;
+  adaPriceError.value = false;
+  try {
+    const data = await api.getAdaPrice();
+    adaPrice.value = data.ada_usd;
+    console.log(`💱 ADA Price: $${data.ada_usd.toFixed(4)} USD`);
+  } catch (err) {
+    console.error('Failed to fetch ADA price:', err);
+    adaPriceError.value = true;
+  } finally {
+    adaPriceLoading.value = false;
+  }
+};
+
+// Fetch ADA price on mount and refresh every 60 seconds
+onMounted(() => {
+  fetchAdaPrice();
+  setInterval(fetchAdaPrice, 60000);
+});
 
 // File upload handlers
 const handleReceiptUpload = (event) => {
@@ -547,6 +610,13 @@ const submitClaim = async () => {
       return;
     }
 
+    // Validate ADA price is available for conversion
+    if (!adaPrice.value) {
+      showError('Unable to fetch ADA exchange rate. Please wait and try again.');
+      await fetchAdaPrice();
+      return;
+    }
+
     submitting.value = true;
     error.value = '';
     result.value = null;
@@ -554,10 +624,15 @@ const submitClaim = async () => {
     // Create abort controller for this request
     abortController = new AbortController();
 
-    // Prepare data for ML service (only fields it expects)
+    // Calculate ADA amount at current rate
+    const currentAdaAmount = formData.value.amount_billed / adaPrice.value;
+
+    // Prepare data for ML service
+    // amount_billed = USD (for ML model), amount_ada = ADA equivalent (for blockchain payout)
     const mlData = {
       user_id: props.userId,
       amount_billed: formData.value.amount_billed,
+      amount_ada: parseFloat(currentAdaAmount.toFixed(4)),
       age: formData.value.age,
       gender: formData.value.gender,
       diagnosis: formData.value.diagnosis,

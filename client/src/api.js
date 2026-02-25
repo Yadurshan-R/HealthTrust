@@ -26,6 +26,14 @@ export const api = {
     },
 
     /**
+     * Get current ADA/USD exchange rate
+     */
+    async getAdaPrice() {
+        const response = await apiClient.get('/ada-price');
+        return response.data;
+    },
+
+    /**
      * Get user by wallet address
      */
     async getUserByWallet(walletAddress) {

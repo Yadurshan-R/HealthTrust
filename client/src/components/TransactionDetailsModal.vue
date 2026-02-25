@@ -107,10 +107,13 @@
 
               <!-- Amount Billed -->
               <div class="space-y-2">
-                <label class="text-xs font-semibold uppercase text-gray-600">Amount Billed</label>
+                <label class="text-xs font-semibold uppercase text-gray-600">Amount Billed (USD)</label>
                 <div class="bg-green-50 border border-green-200 rounded p-3">
                   <p class="text-green-700 font-semibold text-lg">
-                    ₳{{ metadata?.amount_billed?.toLocaleString() || amount }}
+                    ${{ metadata?.amount_billed?.toLocaleString() || amount }}
+                  </p>
+                  <p v-if="metadata?.amount_ada" class="text-main-blue text-sm font-semibold mt-0.5">
+                    ≈ ₳{{ metadata.amount_ada.toFixed(2) }} ADA
                   </p>
                 </div>
               </div>

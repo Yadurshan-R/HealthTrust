@@ -176,6 +176,8 @@ interface PayoutRequest {
         claim_id: number;
         user_id: number;
         amount: number;
+        amount_usd?: number;
+        amount_ada?: number;
         ml_status: string;
         claim_type: string;
         patient_name?: string;
@@ -216,7 +218,8 @@ app.post('/api/payout-transaction', async (req: Request, res: Response) => {
             msg: ['HealthTrust Insurance Payout'],
             claim_id: claimMetadata.claim_id,
             user_id: claimMetadata.user_id,
-            amount_ada: claimMetadata.amount,
+            amount_usd: claimMetadata.amount_usd || claimMetadata.amount,
+            amount_ada: claimMetadata.amount_ada || claimMetadata.amount,
             ml_status: claimMetadata.ml_status,
             claim_type: claimMetadata.claim_type,
             patient: claimMetadata.patient_name || 'N/A',

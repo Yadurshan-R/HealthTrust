@@ -43,7 +43,8 @@ class Claim(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    amount_billed = Column(Numeric(10, 2), nullable=False)
+    amount_billed = Column(Numeric(10, 2), nullable=False)  # USD amount
+    amount_ada = Column(Numeric(12, 4), nullable=True)  # ADA equivalent at time of submission
     age = Column(Integer, nullable=False)
     gender = Column(String(10), nullable=False)
     diagnosis = Column(String(100), nullable=False)

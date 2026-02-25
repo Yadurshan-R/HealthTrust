@@ -89,7 +89,8 @@
           <div class="flex items-center gap-3 sm:gap-4 text-xs mb-2">
             <div>
               <span class="text-dark-gray">Amount:</span>
-              <span class="font-semibold text-gray-900 ml-1">₳{{ tx.amount.toLocaleString() }}</span>
+              <span class="font-semibold text-gray-900 ml-1">${{ tx.amount.toLocaleString() }}</span>
+              <span v-if="tx.amount_ada" class="font-semibold text-main-blue ml-1">(₳{{ tx.amount_ada.toFixed(2) }})</span>
             </div>
             <div class="hidden sm:block">
               <span class="text-dark-gray">Diagnosis:</span>
