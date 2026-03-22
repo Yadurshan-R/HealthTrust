@@ -1,8 +1,5 @@
-# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 HealthTrust — AI-Powered Insurance Fraud Detection on Cardano# 🏥 Healthcare Insurance Fraud Detection dApp
 
-
-
-**Final Year Project** — Blockchain-Enabled Healthcare Insurance Claims Processing
+**Final Year Project** — HealthTrust: An AI-Driven Blockchain bApp for Automated Healthcare Insurance Fraud Detection and Instant Claims Settlement
 
 
 
