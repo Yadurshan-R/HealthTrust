@@ -1,8 +1,6 @@
-#HealthTrust
-
+# HealthTrust
 
 **Final Year Project** — HealthTrust: An AI-Driven Blockchain bApp for Automated Healthcare Insurance Fraud Detection and Instant Claims Settlement
-
 
 
 [![Cardano](https://img.shields.io/badge/Cardano-Preprod_Testnet-blue)](https://preprod.cardanoscan.io)**Final Year Project** — Decentralized Healthcare Insurance Claims Processing
