@@ -1,3 +1,16 @@
+# =============================================================================
+# AI USAGE DECLARATION
+# =============================================================================
+# This file contains code that utilises OpenAI's GPT-4o Vision API for 
+# prescription verification. The AI component is explicitly declared as per
+# BCS Code of Conduct Section 3.2 (Professional Competence and Integrity).
+#
+# AI Tool: OpenAI GPT-4o Vision API
+# Purpose: Extract and compare medicine lists from prescription and receipt images
+# Integration: Core system component for document verification
+# Author Review: All prompts and response handling logic reviewed by Yadurshan R.
+# =============================================================================
+
 """
 Prescription-Receipt Medicine Verification System using GPT-4o Vision API
 Compares ONLY the medicines between doctor's prescription and pharmacy receipt.
